@@ -21,12 +21,30 @@ var FrameType = {
     BLOCKSTUN: 6
 }
 
+function arrSum(arr) {
+    return arr.reduce((a, b) => {a + b});
+}
+
 function getAttackFrameType(move, duration) {
-    if(duration <= move.startup - 1) {
+    var totalActive = 0;
+    for(var i = 0; i < move.active.length; i++) {
+        totalActive += Math.abs(move.active[i]);
+    }
+    var activeStart = move.startup - 1;
+
+    if(duration <= activeStart) {
         return FrameType.ATTACK_STARTUP;
-    } else if(duration <= move.startup - 1 + move.active[0]) {
-        return FrameType.ATTACK_ACTIVE;
-    } else if(duration <= move.startup - 1 + move.active[0] + move.recovery) {
+    } else if(duration <= activeStart + totalActive) {
+        // if the attack has multiple hits, make sure to return the right type
+        var count = 0;
+        for(var i = 0; i < move.active.length; i++) {
+            count += Math.abs(move.active[i]);
+            if(duration <= activeStart + count) {
+                return move.active[i] > 0 ? FrameType.ATTACK_ACTIVE : FrameType.ATTACK_ACTIVE_NO_HITBOX;
+            }
+        }
+
+    } else if(duration <= activeStart + totalActive + move.recovery) {
         return FrameType.ATTACK_RECOVERY;
     } else {
         return FrameType.NEUTRAL;
@@ -35,13 +53,34 @@ function getAttackFrameType(move, duration) {
 
 function lastFrameOfMove(frame, state) {
     var move = state.move;
+    var totalActive = 0;
+    for(var i = 0; i < move.active.length; i++) {
+        totalActive += Math.abs(move.active[i]);
+    }
     var duration = frame - state.startFrame + 1;
-    return duration == move.startup - 1 + move.active[0] + move.recovery;
+    return duration == move.startup - 1 + totalActive + move.recovery;
+}
+
+function startOfHitbox(move, duration) {
+    var activeStart = move.startup - 1;
+    var count = 0;
+    for(var i = 0; i < move.active.length; i++) {
+        if(duration == activeStart + count) {
+            return true;
+        }
+        count += Math.abs(move.active[i]);
+    }
+    return false;
 }
 
 function canAct(state) {
     return state.type === PlayerState.NEUTRAL
         || (isBlocking(state) && state.blockstun === 0);
+}
+
+function cancellable(frameType) {
+    return frameType === FrameType.ATTACK_ACTIVE
+        || frameType === FrameType.ATTACK_ACTIVE_NO_HITBOX;
 }
 
 // can attack if in an acting state, or if the current move has connected and
@@ -50,7 +89,7 @@ function canAttack(frame, state, action) {
     return canAct(state) ||
         (state.type === PlayerState.ATTACKING
         && state.connected
-        && getAttackFrameType(state.move, frame - state.startFrame + 1) === FrameType.ATTACK_ACTIVE
+        && cancellable(getAttackFrameType(state.move, frame - state.startFrame + 1))
         && Characters.gatlingAllowed(state.move, action));
 }
 
@@ -117,6 +156,17 @@ function processFrameType(frame, states, frames) {
     }
 }
 
+function activateHitboxes(frame, states) {
+    for(var player = 0; player <= 1; player++) {
+        // if this is the start of any hit, activate the hitbox
+        if(states[player].type == PlayerState.ATTACKING) {
+            if(startOfHitbox(states[player].move, frame - states[player].startFrame + 1)) {
+                states[player].connected = false;
+            }
+        }
+    }
+}
+
 function processStateInteraction(frame, states, frames, characters) {
     var newStates = [Object.assign({}, states[0]), Object.assign({}, states[1])];
     for(var player = 0; player <= 1; player++) {
@@ -125,7 +175,7 @@ function processStateInteraction(frame, states, frames, characters) {
         if(states[player].type == PlayerState.ATTACKING) {
             var move = states[player].move;
             var frameType = getAttackFrameType(move, frame - states[player].startFrame + 1);
-            
+
             // if we have active frames and they aren't blocking,
             // and we haven't hit them with the move, put them in hitstun
             if(frameType == FrameType.ATTACK_ACTIVE 
@@ -201,6 +251,8 @@ function calculateFrames(characters, actions) {
 
         // write frame types
         processFrameType(curFrame, states, frames);
+
+        activateHitboxes(curFrame, states);
 
         // resolve states
         processStateInteraction(curFrame, states, frames, characters);
