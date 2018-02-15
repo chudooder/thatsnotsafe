@@ -6,9 +6,43 @@
 </head>
 <body>
   <div id="app">
-    LOL
+    <div class="timeline">
+      <div class="header-col">
+        <div class="header-row"></div>
+        <div class="header-row">
+          <span> {{ characters[0] }} </span>
+        </div>
+        <div class="header-row">
+          <span> -------------------- </span>
+        </div>
+        <div class="header-row">
+          <span> {{ characters[1] }} </span>
+        </div>
+        <div class="header-row"></div>
+      </div>
+      <div class="frame-col" v-for="frame in frameData[0].length">
+        <div class="frame-row">
+          <span v-if="actions[0][frame-1]"> {{actions[0][frame-1]}} </span>
+        </div>
+        <div class="frame-row">
+          <frame-indicator :frame-type="frameData[0][frame - 1]"></frame-indicator>
+        </div>
+        <div class="frame-row">
+          <span>{{ frame }}</span>
+        </div>
+        <div class="frame-row">
+          <frame-indicator :frame-type="frameData[1][frame - 1]"></frame-indicator>
+        </div>
+        <div class="frame-row">
+          <span v-if="actions[1][frame-1]"> {{actions[1][frame-1]}} </span>
+        </div>
+      </div>
+    </div>
   </div>
 </body>
+
+<link href="https://fonts.googleapis.com/css?family=Mukta+Mahee" rel="stylesheet"> 
+<link rel="stylesheet" type="text/css" href="styles.css">
 
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script src="characters.js"></script>
