@@ -24,6 +24,17 @@ function assertArraysWeak(arr1, arr2) {
     }
 }
 
+function expand(exparr) {
+    var res = []
+    for(var i = 0; i < exparr.length; i++) {
+        var rep = exparr[i][1];
+        for(var j = 0; j < rep; j++) {
+            res.push(exparr[i][0]);
+        }
+    }
+    return res;
+}
+
 function test(testName, func) {
     numTests++;
     try {
@@ -39,492 +50,128 @@ function test(testName, func) {
 function runTests() {
     test("basic-hitstun", () => {
         var res = Rules.calculateFrames(["Elphelt", "Elphelt"], [["5P"], []]);
-        assertArrays([
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL
-            ], res[0]);
-        assertArrays([
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.NEUTRAL
-            ], res[1]);
+        assertArrays(expand([
+                [FrameType.ATTACK_STARTUP, 4],
+                [FrameType.ATTACK_ACTIVE, 3],
+                [FrameType.ATTACK_RECOVERY, 5],
+                [FrameType.NEUTRAL, 4]
+            ]), res[0]);
+        assertArrays(expand([
+                [FrameType.NEUTRAL, 5],
+                [FrameType.HITSTUN, 10],
+                [FrameType.NEUTRAL, 1]
+            ]), res[1]);
     });
 
     test("basic-crouch-hitstun", () => {
         var res = Rules.calculateFrames(["Elphelt", "Elphelt"], [["c.S"], ["_C"]]);
-        assertArrays([
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.NEUTRAL,
-            ], res[0]);
-        assertArrays([
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL
-            ], res[1]);
+        assertArrays(expand([
+                [FrameType.ATTACK_STARTUP, 4],
+                [FrameType.ATTACK_ACTIVE, 5],
+                [FrameType.ATTACK_RECOVERY, 18],
+                [FrameType.NEUTRAL, 1]
+            ]), res[0]);
+        assertArrays(expand([
+                [FrameType.NEUTRAL, 5],
+                [FrameType.HITSTUN, 18],
+                [FrameType.NEUTRAL, 5]
+            ]), res[1]);
     });
 
     test("basic-blockstun", () => {
         var res = Rules.calculateFrames(["Elphelt", "Elphelt"], [["5P"], ["_B"]]);
-        assertArrays([
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL
-            ], res[0]);
-        assertArrays([
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.BLOCKSTUN,
-                FrameType.BLOCKSTUN,
-                FrameType.BLOCKSTUN,
-                FrameType.BLOCKSTUN,
-                FrameType.BLOCKSTUN,
-                FrameType.BLOCKSTUN,
-                FrameType.BLOCKSTUN,
-                FrameType.BLOCKSTUN,
-                FrameType.BLOCKSTUN,
-                FrameType.NEUTRAL
-            ], res[1]);
+        assertArrays(expand([
+                [FrameType.ATTACK_STARTUP, 4],
+                [FrameType.ATTACK_ACTIVE, 3],
+                [FrameType.ATTACK_RECOVERY, 5],
+                [FrameType.NEUTRAL, 3]
+            ]), res[0]);
+        assertArrays(expand([
+                [FrameType.NEUTRAL, 5],
+                [FrameType.BLOCKSTUN, 9],
+                [FrameType.NEUTRAL, 1]
+            ]), res[1]);
     });
 
     test("gatling-success", () => {
         var res = Rules.calculateFrames(["Elphelt", "Elphelt"], 
             [["5P", null, null, null, null, "5K"], []]);
-        assertArrays([
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-            ], res[0]);
-        assertArrays([
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.NEUTRAL
-            ], res[1]);
+        assertArrays(expand([
+                [FrameType.ATTACK_STARTUP, 4],
+                [FrameType.ATTACK_ACTIVE, 1],
+                [FrameType.ATTACK_STARTUP, 6],
+                [FrameType.ATTACK_ACTIVE, 4],
+                [FrameType.ATTACK_RECOVERY, 5],
+                [FrameType.NEUTRAL, 3]
+            ]), res[0]);
+        assertArrays(expand([
+                [FrameType.NEUTRAL, 5],
+                [FrameType.HITSTUN, 17],
+                [FrameType.NEUTRAL, 1]
+            ]), res[1]);
     });
 
     test("gatling-fail-startup", () => {
         var res = Rules.calculateFrames(["Elphelt", "Elphelt"], [["5P", null, "5K"], []]);
-        assertArrays([
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL
-            ], res[0]);
-        assertArrays([
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.NEUTRAL
-            ], res[1]);
+        assertArrays(expand([
+                [FrameType.ATTACK_STARTUP, 4],
+                [FrameType.ATTACK_ACTIVE, 3],
+                [FrameType.ATTACK_RECOVERY, 5],
+                [FrameType.NEUTRAL, 4]
+            ]), res[0]);
+        assertArrays(expand([
+                [FrameType.NEUTRAL, 5],
+                [FrameType.HITSTUN, 10],
+                [FrameType.NEUTRAL, 1]
+            ]), res[1]);
     });
 
     test("gatling-fail-recovery", () => {
         var res = Rules.calculateFrames(["Elphelt", "Elphelt"], 
             [["5P", null, null, null, null, null, null, "5K"], []]);
-        assertArrays([
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL
-            ], res[0]);
-        assertArrays([
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.NEUTRAL
-            ], res[1]);
+        assertArrays(expand([
+                [FrameType.ATTACK_STARTUP, 4],
+                [FrameType.ATTACK_ACTIVE, 3],
+                [FrameType.ATTACK_RECOVERY, 5],
+                [FrameType.NEUTRAL, 4]
+            ]), res[0]);
+        assertArrays(expand([
+                [FrameType.NEUTRAL, 5],
+                [FrameType.HITSTUN, 10],
+                [FrameType.NEUTRAL, 1]
+            ]), res[1]);
     });
 
     test("gatling-fail-no-route", () => {
         var res = Rules.calculateFrames(["Elphelt", "Elphelt"], [["c.S", null, null, null, null, "5K"], ["_C"]]);
-        assertArrays([
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.NEUTRAL,
-            ], res[0]);
-        assertArrays([
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL
-            ], res[1]);
+        assertArrays(expand([
+                [FrameType.ATTACK_STARTUP, 4],
+                [FrameType.ATTACK_ACTIVE, 5],
+                [FrameType.ATTACK_RECOVERY, 18],
+                [FrameType.NEUTRAL, 1]
+            ]), res[0]);
+        assertArrays(expand([
+                [FrameType.NEUTRAL, 5],
+                [FrameType.HITSTUN, 18],
+                [FrameType.NEUTRAL, 5],
+            ]), res[1]);
     });
 
-    test("multihit-frame-type", () => {
+    test("basic-multihit", () => {
         var res = Rules.calculateFrames(["Elphelt", "Elphelt"], [["2H"], []]);
-        assertArraysWeak([
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_ACTIVE_NO_HITBOX,
-                FrameType.ATTACK_ACTIVE_NO_HITBOX,
-                FrameType.ATTACK_ACTIVE_NO_HITBOX,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-            ], res[0]);
-    });
-
-    test("multihit-hitstun", () => {
-        var res = Rules.calculateFrames(["Elphelt", "Elphelt"], [["2H"], []]);
-        assertArrays([
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_STARTUP,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_ACTIVE_NO_HITBOX,
-                FrameType.ATTACK_ACTIVE_NO_HITBOX,
-                FrameType.ATTACK_ACTIVE_NO_HITBOX,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_ACTIVE,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.ATTACK_RECOVERY,
-                FrameType.NEUTRAL
-            ], res[0]);
-        assertArrays([
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.HITSTUN,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL,
-                FrameType.NEUTRAL
-            ], res[1]);
+        assertArrays(expand([
+                [FrameType.ATTACK_STARTUP, 17],
+                [FrameType.ATTACK_ACTIVE, 3],
+                [FrameType.ATTACK_ACTIVE_NO_HITBOX, 3],
+                [FrameType.ATTACK_ACTIVE, 3],
+                [FrameType.ATTACK_RECOVERY, 18],
+                [FrameType.NEUTRAL, 1]
+            ]), res[0]);
+        assertArrays(expand([
+                [FrameType.NEUTRAL, 18],
+                [FrameType.HITSTUN, 23],
+                [FrameType.NEUTRAL, 4]
+            ]), res[1]);
     });
 
     console.log(numPassed + " / " + numTests + " tests passed.");
