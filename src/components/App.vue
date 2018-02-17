@@ -1,19 +1,8 @@
 <template>
   <div>
-    <div class="sidebar">
-      <div class="sidebar-header">
-        {{ characters[0] }}
-      </div>
-      <div class="sidebar-row"
-        v-for="(move, name, index) in getCharacterMoves(0)"
-        draggable="true"
-        :class="{'sidebar-dark': index % 2 == 0, 'sidebar-light': !(index % 2 == 0)}">
-        <span> {{ name }} </span>
-        <div style="float:right; display:inline-block;">
-          <div class="sidebar-row-framedata startup"><span class="center-span">{{ move.startup }}</span></div><div class="sidebar-row-framedata active"><span class="center-span">{{ move.total_active }}</span></div><div class="sidebar-row-framedata recovery"><span class="center-span">{{ move.recovery }}</span></div>
-        </div>
-      </div>
-    </div>
+    <Sidebar
+      :charName="characters[0]"
+      :moves="getCharacterMoves(0)"/>
     <div class="timeline">
       <div class="header-col">
         <div class="header-row"></div>
@@ -51,11 +40,12 @@
 
 <script>
     import FrameIndicator from './FrameIndicator.vue'
+    import Sidebar from './Sidebar.vue'
     import Characters from '../engine/characters.js';
     import Rules from '../engine/rules.js';
 
     export default {
-        components: { FrameIndicator },
+        components: { FrameIndicator, Sidebar },
 
         data: function() {
             return {
