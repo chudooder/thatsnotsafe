@@ -6,6 +6,20 @@
 </head>
 <body>
   <div id="app">
+    <div class="sidebar">
+      <div class="sidebar-header">
+        {{ characters[0] }}
+      </div>
+      <div class="sidebar-row"
+        v-for="(move, name, index) in getCharacterMoves(0)"
+        draggable="true"
+        :class="{'sidebar-dark': index % 2 == 0, 'sidebar-light': !(index % 2 == 0)}">
+        <span> {{ name }} </span>
+        <div style="float:right; display:inline-block;">
+          <div class="sidebar-row-framedata startup"><span class="center-span">{{ move.startup }}</span></div><div class="sidebar-row-framedata active"><span class="center-span">{{ move.total_active }}</span></div><div class="sidebar-row-framedata recovery"><span class="center-span">{{ move.recovery }}</span></div>
+        </div>
+      </div>
+    </div>
     <div class="timeline">
       <div class="header-col">
         <div class="header-row"></div>
@@ -25,13 +39,13 @@
           <span v-if="actions[0][frame-1]"> {{actions[0][frame-1]}} </span>
         </div>
         <div class="frame-row">
-          <frame-indicator :frame-type="frameData[0][frame - 1]"></frame-indicator>
+          <frame-indicator :top=true :frame-type="frameData[0][frame - 1]"></frame-indicator>
         </div>
         <div class="frame-row">
           <span>{{ frame }}</span>
         </div>
         <div class="frame-row">
-          <frame-indicator :frame-type="frameData[1][frame - 1]"></frame-indicator>
+          <frame-indicator :top=false :frame-type="frameData[1][frame - 1]"></frame-indicator>
         </div>
         <div class="frame-row">
           <span v-if="actions[1][frame-1]"> {{actions[1][frame-1]}} </span>

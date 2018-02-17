@@ -26,15 +26,11 @@ function arrSum(arr) {
 }
 
 function getAttackFrameType(move, duration) {
-    var totalActive = 0;
-    for(var i = 0; i < move.active.length; i++) {
-        totalActive += Math.abs(move.active[i]);
-    }
     var activeStart = move.startup - 1;
 
     if(duration <= activeStart) {
         return FrameType.ATTACK_STARTUP;
-    } else if(duration <= activeStart + totalActive) {
+    } else if(duration <= activeStart + move.total_active) {
         // if the attack has multiple hits, make sure to return the right type
         var count = 0;
         for(var i = 0; i < move.active.length; i++) {
@@ -44,7 +40,7 @@ function getAttackFrameType(move, duration) {
             }
         }
 
-    } else if(duration <= activeStart + totalActive + move.recovery) {
+    } else if(duration <= activeStart + move.total_active + move.recovery) {
         return FrameType.ATTACK_RECOVERY;
     } else {
         return FrameType.NEUTRAL;
@@ -53,12 +49,8 @@ function getAttackFrameType(move, duration) {
 
 function lastFrameOfMove(frame, state) {
     var move = state.move;
-    var totalActive = 0;
-    for(var i = 0; i < move.active.length; i++) {
-        totalActive += Math.abs(move.active[i]);
-    }
     var duration = frame - state.startFrame + 1;
-    return duration == move.startup - 1 + totalActive + move.recovery;
+    return duration == move.startup - 1 + move.total_active + move.recovery;
 }
 
 function startOfHitbox(move, duration) {
