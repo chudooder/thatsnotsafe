@@ -1,6 +1,6 @@
 "use strict";
 
-var Rules = (() => {
+import Characters from './characters.js';
 
 var PlayerState = {
     NEUTRAL: 0,
@@ -271,9 +271,9 @@ function calculateFrames(characters, actions) {
     return frames;
 }
 
-return {
+var Rules = {
     calculateFrames: calculateFrames,
     FrameType: FrameType
 };
 
-})();
+export default Rules

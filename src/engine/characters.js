@@ -565,3 +565,5 @@ var Characters = (() => {
         gatlingAllowed: gatlingAllowed,
     }
 })();
+
+export default Characters;
