@@ -1,51 +1,62 @@
 <template>
-  <div>
-    <Sidebar
-      :charName="characters[0]"
-      :moves="getCharacterMoves(0)"/>
-    <div class="timeline">
-      <div class="header-col">
-        <div class="header-row"></div>
-        <div class="header-row">
-          <span> {{ characters[0] }} </span>
+    <div>
+        <Sidebar
+            :charName="characters[0]"
+            :moves="getCharacterMoves(0)"/>
+        <div class="timeline">
+            <div class="header-col">
+                <div class="header-row"></div>
+                <div class="header-row">
+                    <span> {{ characters[0] }} </span>
+                </div>
+                <div class="header-row">
+                    <span> -------------------- </span>
+                </div>
+                <div class="header-row">
+                    <span> {{ characters[1] }} </span>
+                </div>
+            <div class="header-row"></div>
         </div>
-        <div class="header-row">
-          <span> -------------------- </span>
+        <div class="frame-col" v-for="frame in frameData[0].length">
+            <div class="frame-row">
+                <ActionIndicator
+                    v-if="actions[0][frame-1]"
+                    v-on:remove="removeAction"
+                    :action="actions[0][frame-1]"
+                    :player="0"
+                    :frame="frame-1"/>
+            </div>
+            <div class="frame-row">
+                <FrameIndicator :top=true :frame-type="frameData[0][frame - 1]"></FrameIndicator>
+            </div>
+            <div class="frame-row">
+                <span>{{ frame }}</span>
+            </div>
+            <div class="frame-row">
+                <FrameIndicator :top=false :frame-type="frameData[1][frame - 1]"></FrameIndicator>
+            </div>
+            <div class="frame-row">
+                <ActionIndicator
+                    v-if="actions[1][frame-1]"
+                    v-on:remove="removeAction"
+                    :action="actions[1][frame-1]"
+                    :player="1"
+                    :frame="frame-1"/>
+            </div>
         </div>
-        <div class="header-row">
-          <span> {{ characters[1] }} </span>
-        </div>
-        <div class="header-row"></div>
-      </div>
-      <div class="frame-col" v-for="frame in frameData[0].length">
-        <div class="frame-row">
-          <span v-if="actions[0][frame-1]"> {{actions[0][frame-1]}} </span>
-        </div>
-        <div class="frame-row">
-          <FrameIndicator :top=true :frame-type="frameData[0][frame - 1]"></FrameIndicator>
-        </div>
-        <div class="frame-row">
-          <span>{{ frame }}</span>
-        </div>
-        <div class="frame-row">
-          <FrameIndicator :top=false :frame-type="frameData[1][frame - 1]"></FrameIndicator>
-        </div>
-        <div class="frame-row">
-          <span v-if="actions[1][frame-1]"> {{actions[1][frame-1]}} </span>
-        </div>
-      </div>
     </div>
-  </div>
+</div>
 </template>
 
 <script>
     import FrameIndicator from './FrameIndicator.vue'
+    import ActionIndicator from './ActionIndicator.vue'
     import Sidebar from './Sidebar.vue'
     import Characters from '../engine/characters.js';
     import Rules from '../engine/rules.js';
 
     export default {
-        components: { FrameIndicator, Sidebar },
+        components: { FrameIndicator, ActionIndicator, Sidebar },
 
         data: function() {
             return {
@@ -57,13 +68,29 @@
 
         methods: {
             calculateFrameData: function() {
-                console.log(Rules)
                 this.frameData = Rules.calculateFrames(this.characters, this.actions);
             },
 
             getCharacterMoves: function(player) {
                 var character = this.characters[player];
                 return Characters.data[character].moves;
+            },
+
+            removeAction: function(player, frame) {
+                this.actions[player][frame] = null;
+                this.trimActions();
+                this.calculateFrameData();
+            },
+
+            trimActions: function() {
+                for(var p = 0; p <= 1; p++) {
+                    var i = this.actions[p].length - 1;
+                    while(this.actions[p][i] == null && i >= 0) {
+                        i--;
+                    }
+                    this.actions[p] = this.actions[p].slice(0, i+1);
+                }
+                console.log(this.actions);
             }
         },
 

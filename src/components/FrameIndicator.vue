@@ -1,6 +1,6 @@
 <template>
     <div class="frame-indicator" :style="{backgroundColor: toColor(frameType)}">
-        <span class="frame-tooltip" :style=getTooltipStyle(top) >{{ toString(frameType) }}</span>
+        <span class="frame-tooltip unselectable" :style=getTooltipStyle(top) >{{ toString(frameType) }}</span>
     </div>
 </template>
 
@@ -53,9 +53,9 @@
 
             getTooltipStyle: function(top) {
                 if(top) {
-                    return {bottom: "120%"};
-                } else {
                     return {top: "120%"};
+                } else {
+                    return {bottom: "120%"};
                 }
             }
         }
