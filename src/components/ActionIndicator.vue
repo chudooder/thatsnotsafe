@@ -26,7 +26,10 @@
 
         methods: {
             removeAction: function() {
-                this.$emit('remove', this.player, this.frame);
+                this.$store.commit('removeAction', {
+                    player: this.player, 
+                    frame: this.frame
+                });
             },
 
             styleObject: function() {
@@ -58,7 +61,11 @@
             drop: function(event) {
                 event.preventDefault();
                 var name = event.dataTransfer.getData("name");
-                this.$emit('add', this.player, this.frame, name);
+                this.$store.commit('addAction', {
+                    player: this.player,
+                    frame: this.frame,
+                    name: name
+                });
             }
         }
     }
