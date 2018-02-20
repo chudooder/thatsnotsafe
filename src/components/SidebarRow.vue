@@ -1,6 +1,7 @@
 <template>
     <div class="sidebar-row"
         draggable="true"
+        @dragstart="dragStart"
         :class="{'sidebar-dark': index % 2 == 0, 'sidebar-light': !(index % 2 == 0)}">
         <span> {{ name }} </span>
         <div style="float:right; display:inline-block;">
@@ -15,6 +16,12 @@
             "move": Object,
             "name": String,
             "index": Number
+        },
+
+        methods: {
+            dragStart: function(event) {
+                event.dataTransfer.setData("name", this.name);
+            }
         }
     }
 </script>

@@ -109,7 +109,10 @@ function processStateChangingActions(frame, actions, states, characters) {
 
         // regular block
         } else if(action == "_B" && canAct(states[player])) {
-            states[player] = {type: PlayerState.BLOCKING};
+            states[player] = {
+                type: PlayerState.BLOCKING,
+                blockstun: 0
+            };
 
         // all other actions treated as attacks
         } else {

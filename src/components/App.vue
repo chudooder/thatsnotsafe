@@ -3,7 +3,10 @@
         <Sidebar
             :charName="characters[0]"
             :moves="getCharacterMoves(0)"/>
+
         <div class="timeline">
+            <!-- Timeline header -->
+
             <div class="header-col">
                 <div class="header-row"></div>
                 <div class="header-row">
@@ -15,37 +18,41 @@
                 <div class="header-row">
                     <span> {{ characters[1] }} </span>
                 </div>
-            <div class="header-row"></div>
-        </div>
-        <div class="frame-col" v-for="frame in frameData[0].length">
-            <div class="frame-row">
-                <ActionIndicator
-                    v-if="actions[0][frame-1]"
-                    v-on:remove="removeAction"
-                    :action="actions[0][frame-1]"
-                    :player="0"
-                    :frame="frame-1"/>
+                <div class="header-row"></div>
             </div>
-            <div class="frame-row">
-                <FrameIndicator :top=true :frame-type="frameData[0][frame - 1]"></FrameIndicator>
-            </div>
-            <div class="frame-row">
-                <span>{{ frame }}</span>
-            </div>
-            <div class="frame-row">
-                <FrameIndicator :top=false :frame-type="frameData[1][frame - 1]"></FrameIndicator>
-            </div>
-            <div class="frame-row">
-                <ActionIndicator
-                    v-if="actions[1][frame-1]"
-                    v-on:remove="removeAction"
-                    :action="actions[1][frame-1]"
-                    :player="1"
-                    :frame="frame-1"/>
+
+            <!-- Timeline elements -->
+            <div class="frame-col" v-for="frame in frameData[0].length">
+                <div class="frame-row">
+                    <ActionIndicator
+                        v-on:remove="removeAction"
+                        v-on:add="addAction"
+                        :action="actions[0][frame-1]"
+                        :player="0"
+                        :frame="frame-1"
+                        :showBorder="moveSelected"/>
+                </div>
+                <div class="frame-row">
+                    <FrameIndicator :top=true :frame-type="frameData[0][frame - 1]"></FrameIndicator>
+                </div>
+                <div class="frame-row">
+                    <span>{{ frame }}</span>
+                </div>
+                <div class="frame-row">
+                    <FrameIndicator :top=false :frame-type="frameData[1][frame - 1]"></FrameIndicator>
+                </div>
+                <div class="frame-row">
+                    <ActionIndicator
+                        v-on:remove="removeAction"
+                        v-on:add="addAction"
+                        :action="actions[1][frame-1]"
+                        :player="1"
+                        :frame="frame-1"
+                        :showBorder="moveSelected"/>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </template>
 
 <script>
@@ -62,7 +69,8 @@
             return {
                 characters: ["Elphelt", "Elphelt"],
                 actions: [["5K", null, null, null, null, null, null, "f.S"], ["_B"]],
-                frameData: [[],[]]
+                frameData: [[],[]],
+                moveSelected: false
             }
         },
 
@@ -82,6 +90,16 @@
                 this.calculateFrameData();
             },
 
+            addAction: function(player, frame, name) {
+                // pad out actions array
+                for(var i = this.actions[player].length; i < frame; i++) {
+                    this.actions[player][i] = null;
+                }
+                this.actions[player][frame] = name;
+                this.trimActions();
+                this.calculateFrameData();
+            },
+
             trimActions: function() {
                 for(var p = 0; p <= 1; p++) {
                     var i = this.actions[p].length - 1;
@@ -90,7 +108,6 @@
                     }
                     this.actions[p] = this.actions[p].slice(0, i+1);
                 }
-                console.log(this.actions);
             }
         },
 
