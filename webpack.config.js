@@ -1,10 +1,13 @@
+const path = require('path');
+
 module.exports = {
   // This is the "main" file which should include all other modules
   entry: './src/main.js',
   // Where should the compiled file go?
   output: {
     // To the `dist` folder
-    path: './dist',
+    path: path.join(__dirname, 'dist'),
+    publicPath: '/dist/',
     // With the filename `build.js` so it's dist/build.js
     filename: 'build.js'
   },
@@ -33,6 +36,7 @@ module.exports = {
   resolve: {
     alias: {
       vue: 'vue/dist/vue.js'
-    }
+    },
+    modulesDirectories: ['./node_modules']
   }
 }
