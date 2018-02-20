@@ -5,6 +5,8 @@ var Characters = (() => {
         "Elphelt": {
             "moves": {
                 "5P": {
+                    "key": "5P",
+                    "type": "normal",
                     "hits": 1, 
                     "damage": [
                         9
@@ -41,6 +43,8 @@ var Characters = (() => {
                     ]
                 }, 
                 "5K": {
+                    "key": "5K",
+                    "type": "normal",
                     "hits": 1, 
                     "damage": [
                         14
@@ -71,6 +75,8 @@ var Characters = (() => {
                     ]
                 }, 
                 "c.S": {
+                    "key": "c.S",
+                    "type": "normal",
                     "hits": 1, 
                     "damage": [
                         24
@@ -101,6 +107,8 @@ var Characters = (() => {
                     ]
                 }, 
                 "f.S": {
+                    "key": "f.S",
+                    "type": "normal",
                     "hits": 1, 
                     "damage": [
                         28
@@ -128,6 +136,8 @@ var Characters = (() => {
                     ]
                 }, 
                 "5H": {
+                    "key": "5H",
+                    "type": "normal",
                     "hits": 1, 
                     "damage": [
                         20
@@ -152,6 +162,8 @@ var Characters = (() => {
                     ]
                 }, 
                 "5H(2-4)": {
+                    "key": "5H(2-4)",
+                    "type": "normal",
                     "hits": 4, 
                     "damage": [
                         18, 
@@ -176,6 +188,8 @@ var Characters = (() => {
                     "recovery": 26
                 }, 
                 "5H(5)": {
+                    "key": "5H(5)",
+                    "type": "normal",
                     "hits": 1, 
                     "damage": [
                         18
@@ -197,6 +211,8 @@ var Characters = (() => {
                     "recovery": 33
                 }, 
                 "2P": {
+                    "key": "2P",
+                    "type": "normal",
                     "hits": 1, 
                     "damage": [
                         8
@@ -231,6 +247,8 @@ var Characters = (() => {
                     ]
                 }, 
                 "2K": {
+                    "key": "2K",
+                    "type": "normal",
                     "hits": 1, 
                     "damage": [
                         12
@@ -262,6 +280,8 @@ var Characters = (() => {
                     ]
                 }, 
                 "2S": {
+                    "key": "2S",
+                    "type": "normal",
                     "hits": 1, 
                     "damage": [
                         26
@@ -288,6 +308,8 @@ var Characters = (() => {
                     ]
                 }, 
                 "2H": {
+                    "key": "2H",
+                    "type": "normal",
                     "hits": 2, 
                     "damage": [
                         22, 
@@ -316,6 +338,8 @@ var Characters = (() => {
                     ]
                 }, 
                 "j.P": {
+                    "key": "j.P",
+                    "type": "air",
                     "hits": 1, 
                     "damage": [
                         10
@@ -344,6 +368,8 @@ var Characters = (() => {
                     ]
                 }, 
                 "j.K": {
+                    "key": "j.K",
+                    "type": "air",
                     "hits": 1, 
                     "damage": [
                         18
@@ -371,6 +397,8 @@ var Characters = (() => {
                     ]
                 }, 
                 "j.S": {
+                    "key": "j.S",
+                    "type": "air",
                     "hits": 1, 
                     "damage": [
                         28
@@ -398,6 +426,8 @@ var Characters = (() => {
                     ]
                 }, 
                 "j.H": {
+                    "key": "j.H",
+                    "type": "air",
                     "hits": 1, 
                     "damage": [
                         34
@@ -422,6 +452,8 @@ var Characters = (() => {
                     ]
                 }, 
                 "j.D": {
+                    "key": "j.D",
+                    "type": "air",
                     "hits": 1, 
                     "damage": [
                         38
@@ -444,6 +476,8 @@ var Characters = (() => {
                     "gatling": []
                 }, 
                 "6P": {
+                    "key": "6P",
+                    "type": "normal",
                     "hits": 1, 
                     "damage": [
                         24
@@ -466,6 +500,8 @@ var Characters = (() => {
                     "gatling": []
                 }, 
                 "6H": {
+                    "key": "6H",
+                    "type": "normal",
                     "hits": 1, 
                     "damage": [
                         50
@@ -488,6 +524,8 @@ var Characters = (() => {
                     "gatling": []
                 }, 
                 "2D": {
+                    "key": "2D",
+                    "type": "normal",
                     "hits": 1, 
                     "damage": [
                         36
@@ -510,6 +548,8 @@ var Characters = (() => {
                     "gatling": []
                 }, 
                 "5D": {
+                    "key": "5D",
+                    "type": "normal",
                     "hits": 1, 
                     "damage": [
                         22
@@ -529,6 +569,174 @@ var Characters = (() => {
                     ], 
                     "total_active": 6, 
                     "recovery": 16, 
+                    "gatling": []
+                },
+                "236P": {
+                    "key": "236P",
+                    "type": "special",
+                    "name": "Pineberry",
+                    "damage": [
+                        0
+                    ], 
+                    "tension": 150, 
+                    "risc_hit": 0, 
+                    "risc_gain": 0, 
+                    "prorate_type": null, 
+                    "prorate_amount": 1.0, 
+                    "level": 0, 
+                    "guard": "-", 
+                    "cancel": "-", 
+                    "roman": "Y", 
+                    "startup": 0, 
+                    "active": [
+                        0
+                    ], 
+                    "total_active": 0, 
+                    "recovery": 19, 
+                    "gatling": []
+                },
+                "236P>4P(Early)": {
+                    "key": "236P>4P(Early)",
+                    "type": "special",
+                    "name": "Overhand Throw Early",
+                    "damage": [
+                        0
+                    ], 
+                    "tension": 240, 
+                    "risc_hit": -8, 
+                    "risc_gain": +2, 
+                    "prorate_type": null, 
+                    "prorate_amount": 1.0, 
+                    "level": 0, 
+                    "guard": "All", 
+                    "cancel": "-", 
+                    "roman": "YRP", 
+                    "startup": 10, 
+                    "active": [
+                        0
+                    ], 
+                    "total_active": 0, 
+                    "recovery": 33, 
+                    "gatling": []
+                },
+                "236P>4P(Late)": {
+                    "key": "236P>4P(Late)",
+                    "type": "special",
+                    "name": "Overhand Throw Late",
+                    "damage": [
+                        0
+                    ], 
+                    "tension": 240, 
+                    "risc_hit": -6, 
+                    "risc_gain": +2, 
+                    "prorate_type": null, 
+                    "prorate_amount": 1.0, 
+                    "level": 3, 
+                    "guard": "All", 
+                    "cancel": "-", 
+                    "roman": "YRP", 
+                    "startup": 10, 
+                    "active": [
+                        0
+                    ], 
+                    "total_active": 0, 
+                    "recovery": 33, 
+                    "gatling": []
+                },
+                "236P>2P(Early)": {
+                    "key": "236P>2P(Early)",
+                    "type": "special",
+                    "name": "Underhand Throw Early",
+                    "damage": [
+                        0
+                    ], 
+                    "tension": 240, 
+                    "risc_hit": -8, 
+                    "risc_gain": +2, 
+                    "prorate_type": null, 
+                    "prorate_amount": 1.0, 
+                    "level": 0, 
+                    "guard": "All", 
+                    "cancel": "-", 
+                    "roman": "YRP", 
+                    "startup": 10, 
+                    "active": [
+                        0
+                    ], 
+                    "total_active": 0, 
+                    "recovery": 33, 
+                    "gatling": []
+                },
+                "236P>2P(Late)": {
+                    "key": "236P>2P(Late)",
+                    "type": "special",
+                    "name": "Underhand Throw Late",
+                    "damage": [
+                        0
+                    ], 
+                    "tension": 240, 
+                    "risc_hit": -6, 
+                    "risc_gain": +2, 
+                    "prorate_type": null, 
+                    "prorate_amount": 1.0, 
+                    "level": 3, 
+                    "guard": "All", 
+                    "cancel": "-", 
+                    "roman": "YRP", 
+                    "startup": 10, 
+                    "active": [
+                        0
+                    ], 
+                    "total_active": 0, 
+                    "recovery": 33, 
+                    "gatling": []
+                },
+                "236P>j.4P(Early)": {
+                    "key": "236P>j.4P(Early)",
+                    "type": "special",
+                    "name": "Air Overhand Throw Early",
+                    "damage": [
+                        0
+                    ], 
+                    "tension": 240, 
+                    "risc_hit": -8, 
+                    "risc_gain": +2, 
+                    "prorate_type": null, 
+                    "prorate_amount": 1.0, 
+                    "level": 0, 
+                    "guard": "All", 
+                    "cancel": "-", 
+                    "roman": "YRP", 
+                    "startup": 13, 
+                    "active": [
+                        0
+                    ], 
+                    "total_active": 0, 
+                    "recovery": 36, 
+                    "gatling": []
+                },
+                "236P>j.4P(Late)": {
+                    "key": "236P>j.4P(Late)",
+                    "type": "special",
+                    "name": "Air Overhand Throw Late",
+                    "damage": [
+                        0
+                    ], 
+                    "tension": 240, 
+                    "risc_hit": -6, 
+                    "risc_gain": +2, 
+                    "prorate_type": null, 
+                    "prorate_amount": 1.0, 
+                    "level": 3, 
+                    "guard": "All", 
+                    "cancel": "-", 
+                    "roman": "YRP", 
+                    "startup": 13, 
+                    "active": [
+                        0
+                    ], 
+                    "total_active": 0, 
+                    "recovery": 36, 
                     "gatling": []
                 }
             }
@@ -554,15 +762,16 @@ var Characters = (() => {
         return _stunTable[level][column];
     };
 
-    function gatlingAllowed(curMove, newMove) {
-        return curMove.gatling.indexOf(newMove) != -1;
+    function cancelAllowed(curMove, newMove) {
+        return (curMove.gatling.indexOf(newMove.key) != -1)
+            || (newMove.type === 'special' && curMove.cancel.indexOf('S') != -1);
     };
 
     return {
         data: data,
         hitstun: hitstun,
         blockstun: blockstun,
-        gatlingAllowed: gatlingAllowed,
+        cancelAllowed: cancelAllowed,
     }
 })();
 

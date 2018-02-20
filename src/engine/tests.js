@@ -1,4 +1,6 @@
-(() => {
+import Rules from './rules.js';
+
+var Tests = (() => {
 
 var FrameType = Rules.FrameType;
 
@@ -174,9 +176,26 @@ function runTests() {
             ]), res[1]);
     });
 
+    test("special-cancel-success", () => {
+        var res = Rules.calculateFrames(["Elphelt", "Elphelt"], [["2P", null, null, null, "236P"], []]);
+        assertArrays(expand([
+                [FrameType.ATTACK_STARTUP, 3],
+                [FrameType.ATTACK_ACTIVE, 1],
+                [FrameType.ATTACK_RECOVERY, 18],
+                [FrameType.NEUTRAL, 1]
+            ]), res[0]);
+        assertArrays(expand([
+                [FrameType.NEUTRAL, 4],
+                [FrameType.HITSTUN, 10],
+                [FrameType.NEUTRAL, 9]
+            ]), res[1]);
+    });
+
     console.log(numPassed + " / " + numTests + " tests passed.");
 }
 
 runTests();
 
 })();
+
+export default Tests;

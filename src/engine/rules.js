@@ -77,12 +77,14 @@ function cancellable(frameType) {
 
 // can attack if in an acting state, or if the current move has connected and
 // the gatling combination is allowed.
-function canAttack(frame, state, action) {
+function canAttack(frame, state, newMove) {
     return canAct(state) ||
+
+        // regular gatling condition
         (state.type === PlayerState.ATTACKING
         && state.connected
         && cancellable(getAttackFrameType(state.move, frame - state.startFrame + 1))
-        && Characters.gatlingAllowed(state.move, action));
+        && Characters.cancelAllowed(state.move, newMove));
 }
 
 function isBlocking(state) {
@@ -116,12 +118,12 @@ function processStateChangingActions(frame, actions, states, characters) {
 
         // all other actions treated as attacks
         } else {
-            if(canAttack(frame, states[player], action)) {
-                var move = Characters.data[characters[player]].moves[action];
+            var newMove = Characters.data[characters[player]].moves[action];
+            if(canAttack(frame, states[player], newMove)) {
                 states[player] = {
                     type: PlayerState.ATTACKING,
                     startFrame: frame,
-                    move: move,
+                    move: newMove,
                     connected: false
                 };
             }

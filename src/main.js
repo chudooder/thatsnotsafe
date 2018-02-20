@@ -4,6 +4,8 @@ import App from './components/App.vue';
 import Characters from './engine/characters.js';
 import Rules from './engine/rules.js';
 
+import Tests from './engine/tests.js';
+
 Vue.use(Vuex);
 
 // helper functions

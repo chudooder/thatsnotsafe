@@ -44,7 +44,7 @@ def parseProrate(prorate):
     if prorate.startswith('Forced'):
         return ('forced', float(prorate[-3:-1]) / 100)
 
-def getBasicAttacksData(table):
+def getMoveData(table):
     rows = []
     for tr in table.find_all('tr'):
         elems = []
@@ -113,9 +113,10 @@ tables = soup.find_all('table')
 print(len(tables))
 
 # find the basic attacks table
-data = getBasicAttacksData(tables[0])
+data = getMoveData(tables[0])
 addGatlings(tables[5], data)
 addGatlings(tables[6], data)
-
+# universal = getMoveData(tables[1])
+special = getMoveData(tables[2])
 
 json.dump(data, open('elphelt.json', 'w'), indent=4)
