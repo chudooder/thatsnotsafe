@@ -45,6 +45,14 @@ const store = new Vuex.Store({
             trimActions(state.actions);
             state.frameData = Rules.calculateFrames(state.characters, state.actions);
         },
+
+        selectMove: function(state) {
+            state.moveSelected = true;
+        },
+
+        deselectMove: function(state) {
+            state.moveSelected = false;
+        }
     }
 });
 

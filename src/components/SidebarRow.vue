@@ -21,6 +21,7 @@
         methods: {
             dragStart: function(event) {
                 event.dataTransfer.setData("name", this.name);
+                this.$store.commit('selectMove');
             }
         }
     }

@@ -12,6 +12,8 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex';
+
     export default {
         props: {
             action: String,
@@ -23,6 +25,8 @@
         data: function() { return {
             hovering: false,
         }},
+
+        computed: mapState(['moveSelected']),
 
         methods: {
             removeAction: function() {
@@ -51,7 +55,7 @@
             },
 
             borderColor: function() {
-                if(this.showBorder) {
+                if(this.moveSelected) {
                     return '#aaa';
                 } else {
                     return '#0000';
@@ -66,6 +70,7 @@
                     frame: this.frame,
                     name: name
                 });
+                this.$store.commit('deselectMove');
             }
         }
     }

@@ -186,6 +186,6 @@ body {
     width: var(--inner-square-size);
     height: var(--inner-square-size);
     border-style: dashed;
-    border-radius: 4px;
+    border-radius: 8px;
     border-width: var(--inner-border);
 }
