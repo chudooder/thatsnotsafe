@@ -70,7 +70,6 @@
                     frame: this.frame,
                     name: name
                 });
-                this.$store.commit('deselectMove');
             }
         }
     }

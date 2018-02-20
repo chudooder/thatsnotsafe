@@ -2,6 +2,7 @@
     <div class="sidebar-row"
         draggable="true"
         @dragstart="dragStart"
+        @dragend="dragEnd"
         :class="{'sidebar-dark': index % 2 == 0, 'sidebar-light': !(index % 2 == 0)}">
         <span> {{ name }} </span>
         <div style="float:right; display:inline-block;">
@@ -22,6 +23,10 @@
             dragStart: function(event) {
                 event.dataTransfer.setData("name", this.name);
                 this.$store.commit('selectMove');
+            },
+
+            dragEnd: function(event) {
+                this.$store.commit('deselectMove');
             }
         }
     }
