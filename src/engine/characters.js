@@ -489,7 +489,7 @@ var Characters = (() => {
                     "prorate_amount": 0.75, 
                     "level": 2, 
                     "guard": "High", 
-                    "cancel": "-", 
+                    "cancel": "S", 
                     "roman": "YRP", 
                     "startup": 23, 
                     "active": [

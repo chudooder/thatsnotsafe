@@ -87,8 +87,12 @@ function canAttack(frame, state, newMove) {
         && Characters.cancelAllowed(state.move, newMove));
 }
 
-function isBlocking(state) {
-    return state.type === PlayerState.BLOCKING
+function isBlocking(state, move) {
+    if(move)
+        return (state.type === PlayerState.BLOCKING && move.guard != "Low")
+        || (state.type === PlayerState.CROUCH_BLOCKING && !move.guard.startsWith('High'));
+    else
+        return state.type === PlayerState.BLOCKING
         || state.type === PlayerState.CROUCH_BLOCKING;
 }
 
@@ -108,6 +112,9 @@ function processStateChangingActions(frame, actions, states, characters) {
         // crouch
         } else if(action == "_C" && canAct(states[player])) {
             states[player] = {type: PlayerState.CROUCHING};
+
+        } else if(action == "_CB" && canAct(states[player])) {
+            states[player] = {type: PlayerState.CROUCH_BLOCKING};
 
         // regular block
         } else if(action == "_B" && canAct(states[player])) {
@@ -145,7 +152,7 @@ function processFrameType(frame, states, frames) {
             frameType = FrameType.HITSTUN;
         }
 
-        else if(isBlocking(states[player]) && states[player].blockstun > 0) {
+        else if(isBlocking(states[player], null) && states[player].blockstun > 0) {
             frameType = FrameType.BLOCKSTUN;
         }
 
@@ -176,7 +183,7 @@ function processStateInteraction(frame, states, frames, characters) {
             // if we have active frames and they aren't blocking,
             // and we haven't hit them with the move, put them in hitstun
             if(frameType == FrameType.ATTACK_ACTIVE 
-                && !isBlocking(states[other])
+                && !isBlocking(states[other], move)
                 && !states[player].connected) {
 
                 newStates[player].connected = true;
@@ -195,7 +202,7 @@ function processStateInteraction(frame, states, frames, characters) {
             // if we have active frames and they are blocking,
             // put them in blockstun
             else if(frameType == FrameType.ATTACK_ACTIVE
-                && isBlocking(states[other])
+                && isBlocking(states[other], move)
                 && !states[player].connected) {
 
                 newStates[player].connected = true;
