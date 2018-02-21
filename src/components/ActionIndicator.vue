@@ -19,7 +19,6 @@
             action: String,
             player: Number,
             frame: Number,
-            showBorder: Boolean
         },
 
         data: function() { return {

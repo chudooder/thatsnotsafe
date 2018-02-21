@@ -5,6 +5,7 @@
         </div>
         <SidebarRow
             v-for="(move, name, index) in moves"
+            :key="name"
             :move="move"
             :name="name"
             :index="index"/>
