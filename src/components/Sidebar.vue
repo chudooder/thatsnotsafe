@@ -6,6 +6,7 @@
         <SidebarRow
             v-for="(action, name, index) in actions"
             :key="name"
+            :action="action"
             :name="name"
             :index="index"></SidebarRow>
         <div class="sidebar-header">

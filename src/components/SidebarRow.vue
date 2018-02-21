@@ -4,10 +4,16 @@
         @dragstart="dragStart"
         @dragend="dragEnd"
         :class="{'sidebar-dark': index % 2 == 0, 'sidebar-light': !(index % 2 == 0)}">
-        <span> {{ name }} </span>
-        <div v-if="move" style="float:right; display:inline-block;">
-            <div class="sidebar-row-framedata startup"><span class="center-span">{{ move.startup }}</span></div><div class="sidebar-row-framedata active"><span class="center-span">{{ move.total_active }}</span></div><div class="sidebar-row-framedata recovery"><span class="center-span">{{ move.recovery }}</span></div>
-        </div>
+        <template v-if="action">
+            <span> {{ action.name }} </span>
+        </template>
+
+        <template v-if="move">
+            <span> {{ name }} </span>
+            <div v-if="move" style="float:right; display:inline-block;">
+                <div class="sidebar-row-framedata startup"><span class="center-span">{{ move.startup }}</span></div><div class="sidebar-row-framedata active"><span class="center-span">{{ move.total_active }}</span></div><div class="sidebar-row-framedata recovery"><span class="center-span">{{ move.recovery }}</span></div>
+            </div>
+        </template>
     </div>
 </template>
 
@@ -15,6 +21,7 @@
     export default {
         props: {
             "move": Object,
+            "action": Object,
             "name": String,
             "index": Number
         },
