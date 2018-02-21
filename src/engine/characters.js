@@ -744,7 +744,7 @@ var Characters = (() => {
     };
 
     var universalActions = {
-        "_B": { "name": "Block" },
+        "_SB": { "name": "Standing Block" },
         "_CB": { "name": "Crouch Block" },
         "_C": { "name": "Crouch" }
     }

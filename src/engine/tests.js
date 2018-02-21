@@ -81,7 +81,7 @@ function runTests() {
     });
 
     test("basic-blockstun", () => {
-        var res = Rules.calculateFrames(["Elphelt", "Elphelt"], [["5P"], ["_B"]]);
+        var res = Rules.calculateFrames(["Elphelt", "Elphelt"], [["5P"], ["_SB"]]);
         assertArrays(expand([
                 [FrameType.ATTACK_STARTUP, 4],
                 [FrameType.ATTACK_ACTIVE, 3],
@@ -188,6 +188,66 @@ function runTests() {
                 [FrameType.NEUTRAL, 4],
                 [FrameType.HITSTUN, 10],
                 [FrameType.NEUTRAL, 9]
+            ]), res[1]);
+    });
+
+    test("high-block-low-hit", () => {
+        var res = Rules.calculateFrames(["Elphelt", "Elphelt"], [["2K"], ["_SB"]]);
+        assertArrays(expand([
+                [FrameType.ATTACK_STARTUP, 4],
+                [FrameType.ATTACK_ACTIVE, 5],
+                [FrameType.ATTACK_RECOVERY, 6],
+                [FrameType.NEUTRAL, 1]
+            ]), res[0]);
+        assertArrays(expand([
+                [FrameType.NEUTRAL, 5],
+                [FrameType.HITSTUN, 10],
+                [FrameType.NEUTRAL, 1]
+            ]), res[1]);
+    });
+
+    test("low-block-high-hit", () => {
+        var res = Rules.calculateFrames(["Elphelt", "Elphelt"], [["5D"], ["_CB"]]);
+        assertArrays(expand([
+                [FrameType.ATTACK_STARTUP, 23],
+                [FrameType.ATTACK_ACTIVE, 6],
+                [FrameType.ATTACK_RECOVERY, 16],
+                [FrameType.NEUTRAL, 1]
+            ]), res[0]);
+        assertArrays(expand([
+                [FrameType.NEUTRAL, 24],
+                [FrameType.HITSTUN, 15],
+                [FrameType.NEUTRAL, 7]
+            ]), res[1]);
+    });
+
+    test("can-switch-block-low-high", () => {
+        var res = Rules.calculateFrames(["Elphelt", "Elphelt"], [["2K"], ["_CB", "_SB"]]);
+        assertArrays(expand([
+                [FrameType.ATTACK_STARTUP, 4],
+                [FrameType.ATTACK_ACTIVE, 5],
+                [FrameType.ATTACK_RECOVERY, 6],
+                [FrameType.NEUTRAL, 1]
+            ]), res[0]);
+        assertArrays(expand([
+                [FrameType.NEUTRAL, 5],
+                [FrameType.HITSTUN, 10],
+                [FrameType.NEUTRAL, 1]
+            ]), res[1]);
+    });
+
+    test("can-switch-block-high-low", () => {
+        var res = Rules.calculateFrames(["Elphelt", "Elphelt"], [["5D"], ["_SB", "_CB"]]);
+        assertArrays(expand([
+                [FrameType.ATTACK_STARTUP, 23],
+                [FrameType.ATTACK_ACTIVE, 6],
+                [FrameType.ATTACK_RECOVERY, 16],
+                [FrameType.NEUTRAL, 1]
+            ]), res[0]);
+        assertArrays(expand([
+                [FrameType.NEUTRAL, 24],
+                [FrameType.HITSTUN, 15],
+                [FrameType.NEUTRAL, 7]
             ]), res[1]);
     });
 

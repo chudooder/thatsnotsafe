@@ -7,7 +7,7 @@
         @mouseout="hovering = false"
         :style="styleObject()"
         class="action-indicator">
-        {{ action }}
+        {{ cleanup(action) }}
     </div>
 </template>
 
@@ -28,6 +28,16 @@
         computed: mapState(['moveSelected']),
 
         methods: {
+            cleanup: function(str) {
+                if(!str) {
+                    return str;
+                }
+                if(str[0] == '_') {
+                    str = str.slice(1);
+                }
+                return str;
+            },
+
             removeAction: function() {
                 this.$store.commit('removeAction', {
                     player: this.player, 

@@ -87,18 +87,19 @@ function canAttack(frame, state, newMove) {
         && Characters.cancelAllowed(state.move, newMove));
 }
 
-function isBlocking(state, move) {
-    if(move)
-        return (state.type === PlayerState.BLOCKING && move.guard != "Low")
-        || (state.type === PlayerState.CROUCH_BLOCKING && !move.guard.startsWith('High'));
-    else
-        return state.type === PlayerState.BLOCKING
+function isBlocking(state) {
+    return state.type === PlayerState.BLOCKING
         || state.type === PlayerState.CROUCH_BLOCKING;
 }
 
 function isCrouching(state) {
     return state.type === PlayerState.CROUCHING
         || state.type === PlayerState.CROUCH_BLOCKING;
+}
+
+function blocksMove(state, move) {
+    return (state.type === PlayerState.BLOCKING && move.guard != "Low")
+        || (state.type === PlayerState.CROUCH_BLOCKING && !move.guard.startsWith('High'));
 }
 
 function processStateChangingActions(frame, actions, states, characters) {
@@ -113,11 +114,15 @@ function processStateChangingActions(frame, actions, states, characters) {
         } else if(action == "_C" && canAct(states[player])) {
             states[player] = {type: PlayerState.CROUCHING};
 
+        // crouching block
         } else if(action == "_CB" && canAct(states[player])) {
-            states[player] = {type: PlayerState.CROUCH_BLOCKING};
+            states[player] = {
+                type: PlayerState.CROUCH_BLOCKING,
+                blockstun: 0
+            };
 
-        // regular block
-        } else if(action == "_B" && canAct(states[player])) {
+        // standing block
+        } else if(action == "_SB" && canAct(states[player])) {
             states[player] = {
                 type: PlayerState.BLOCKING,
                 blockstun: 0
@@ -152,7 +157,7 @@ function processFrameType(frame, states, frames) {
             frameType = FrameType.HITSTUN;
         }
 
-        else if(isBlocking(states[player], null) && states[player].blockstun > 0) {
+        else if(isBlocking(states[player]) && states[player].blockstun > 0) {
             frameType = FrameType.BLOCKSTUN;
         }
 
@@ -183,7 +188,7 @@ function processStateInteraction(frame, states, frames, characters) {
             // if we have active frames and they aren't blocking,
             // and we haven't hit them with the move, put them in hitstun
             if(frameType == FrameType.ATTACK_ACTIVE 
-                && !isBlocking(states[other], move)
+                && (!isBlocking(states[other]) || !blocksMove(states[other], move))
                 && !states[player].connected) {
 
                 newStates[player].connected = true;
