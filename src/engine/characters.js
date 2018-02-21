@@ -746,10 +746,12 @@ var Characters = (() => {
     var universalActions = {
         "_S": { "name": "Stand" },
         "_SB": { "name": "Standing Block" },
-        "_IB": { "name": "Instant Block" },
+        "_IB": { "name": "Standing Instant Block" },
+        "_FD": { "name": "Standing Faultless Defense" },
         "_C": { "name": "Crouch" },
         "_CB": { "name": "Crouch Block" },
-        "_CIB": { "name": "Crouch Instant Block" }
+        "_CIB": { "name": "Crouch Instant Block" },
+        "_CFD": { "name": "Crouch Faultless Defense" }
     }
 
     var _stunTable = [
@@ -766,8 +768,10 @@ var Characters = (() => {
         return _stunTable[level][column];
     };
 
-    function blockstun(level, instant) {
-        var column = instant ? 4 : 3;
+    function blockstun(level, instant, faultless) {
+        var column = 3;
+        if(instant) column = 4;
+        if(faultless) column = 5;
         return _stunTable[level][column];
     };
 

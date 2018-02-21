@@ -10,8 +10,9 @@ var PlayerState = {
     INSTANT_BLOCKING: 4,
     CROUCH_INSTANT_BLOCKING: 5,
     FAULTLESS_DEFENSE: 6,
-    ATTACKING: 7,
-    HITSTUN: 8,
+    CROUCH_FAUTLESS_DEFENSE: 7,
+    ATTACKING: 8,
+    HITSTUN: 9,
 }
 
 var FrameType = {
@@ -95,12 +96,19 @@ function isBlocking(state) {
     return state.type === PlayerState.BLOCKING
         || state.type === PlayerState.CROUCH_BLOCKING
         || state.type === PlayerState.INSTANT_BLOCKING
-        || state.type === PlayerState.CROUCH_INSTANT_BLOCKING;
+        || state.type === PlayerState.CROUCH_INSTANT_BLOCKING
+        || state.type === PlayerState.FAULTLESS_DEFENSE
+        || state.type === PlayerState.CROUCH_FAUTLESS_DEFENSE;
 }
 
 function isInstantBlocking(state) {
     return state.type === PlayerState.INSTANT_BLOCKING
         || state.type === PlayerState.CROUCH_INSTANT_BLOCKING;
+}
+
+function isFaultlessBlocking(state) {
+    return state.type === PlayerState.FAULTLESS_DEFENSE
+        || state.type === PlayerState.CROUCH_FAUTLESS_DEFENSE;
 }
 
 function isCrouching(state) {
@@ -155,6 +163,20 @@ function processStateChangingActions(frame, actions, states, characters) {
         } else if(action == "_CIB" && canAct(states[player])) {
             states[player] = {
                 type: PlayerState.CROUCH_INSTANT_BLOCKING,
+                blockstun: 0
+            };
+
+        // standing faultless defense
+        } else if(action == "_FD" && canAct(states[player])) {
+            states[player] = {
+                type: PlayerState.FAULTLESS_DEFENSE,
+                blockstun: 0
+            };
+
+        // crouching faultless defense
+        } else if(action == "_CFD" && canAct(states[player])) {
+            states[player] = {
+                type: PlayerState.CROUCH_FAUTLESS_DEFENSE,
                 blockstun: 0
             };
 
@@ -241,7 +263,10 @@ function processStateInteraction(frame, states, frames, characters) {
                 && !states[player].connected) {
 
                 newStates[player].connected = true;
-                var blockstunAmt = Characters.blockstun(move.level, isInstantBlocking(states[other]));
+                var blockstunAmt = Characters.blockstun(
+                    move.level, 
+                    isInstantBlocking(states[other]),
+                    isFaultlessBlocking(states[other]));
                 // cornercase: if already blocking, we need to add +1 frame because
                 // we decrement one too many times
                 if(states[other].blockstun > 0)
