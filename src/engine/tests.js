@@ -95,6 +95,37 @@ function runTests() {
             ]), res[1]);
     });
 
+    test("instant-blockstun", () => {
+        var res = Rules.calculateFrames(["Elphelt", "Elphelt"], [["5P"], ["_IB"]]);
+        assertArrays(expand([
+                [FrameType.ATTACK_STARTUP, 4],
+                [FrameType.ATTACK_ACTIVE, 3],
+                [FrameType.ATTACK_RECOVERY, 5],
+                [FrameType.NEUTRAL, 1]
+            ]), res[0]);
+        assertArrays(expand([
+                [FrameType.NEUTRAL, 5],
+                [FrameType.BLOCKSTUN, 7],
+                [FrameType.NEUTRAL, 1]
+            ]), res[1]);
+    });
+
+    test("crouch-instant-blockstun", () => {
+        var res = Rules.calculateFrames(["Elphelt", "Elphelt"], [["5P"], ["_CIB"]]);
+        assertArrays(expand([
+                [FrameType.ATTACK_STARTUP, 4],
+                [FrameType.ATTACK_ACTIVE, 3],
+                [FrameType.ATTACK_RECOVERY, 5],
+                [FrameType.NEUTRAL, 1]
+            ]), res[0]);
+        assertArrays(expand([
+                [FrameType.NEUTRAL, 5],
+                [FrameType.BLOCKSTUN, 7],
+                [FrameType.NEUTRAL, 1]
+            ]), res[1]);
+    });
+
+
     test("gatling-success", () => {
         var res = Rules.calculateFrames(["Elphelt", "Elphelt"], 
             [["5P", null, null, null, null, "5K"], []]);

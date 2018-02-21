@@ -744,9 +744,11 @@ var Characters = (() => {
     };
 
     var universalActions = {
+        "_C": { "name": "Crouch" },
         "_SB": { "name": "Standing Block" },
         "_CB": { "name": "Crouch Block" },
-        "_C": { "name": "Crouch" }
+        "_IB": { "name": "Instant Block" },
+        "_CIB": { "name": "Crouch Instant Block" }
     }
 
     var _stunTable = [

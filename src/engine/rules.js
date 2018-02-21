@@ -7,8 +7,11 @@ var PlayerState = {
     CROUCHING: 1,
     BLOCKING: 2,
     CROUCH_BLOCKING: 3,
-    ATTACKING: 4,
-    HITSTUN: 5,
+    INSTANT_BLOCKING: 4,
+    CROUCH_INSTANT_BLOCKING: 5,
+    FAULTLESS_DEFENSE: 6,
+    ATTACKING: 7,
+    HITSTUN: 8,
 }
 
 var FrameType = {
@@ -89,17 +92,25 @@ function canAttack(frame, state, newMove) {
 
 function isBlocking(state) {
     return state.type === PlayerState.BLOCKING
-        || state.type === PlayerState.CROUCH_BLOCKING;
+        || state.type === PlayerState.CROUCH_BLOCKING
+        || state.type === PlayerState.INSTANT_BLOCKING
+        || state.type === PlayerState.CROUCH_INSTANT_BLOCKING;
+}
+
+function isInstantBlocking(state) {
+    return state.type === PlayerState.INSTANT_BLOCKING
+        || state.type === PlayerState.CROUCH_INSTANT_BLOCKING;
 }
 
 function isCrouching(state) {
     return state.type === PlayerState.CROUCHING
-        || state.type === PlayerState.CROUCH_BLOCKING;
+        || state.type === PlayerState.CROUCH_BLOCKING
+        || state.type === PlayerState.CROUCH_INSTANT_BLOCKING;
 }
 
 function blocksMove(state, move) {
-    return (state.type === PlayerState.BLOCKING && move.guard != "Low")
-        || (state.type === PlayerState.CROUCH_BLOCKING && !move.guard.startsWith('High'));
+    return isBlocking(state) && (!isCrouching(state) && move.guard != "Low"
+        || isCrouching(state) && !move.guard.startsWith('High'));
 }
 
 function processStateChangingActions(frame, actions, states, characters) {
@@ -125,6 +136,20 @@ function processStateChangingActions(frame, actions, states, characters) {
         } else if(action == "_SB" && canAct(states[player])) {
             states[player] = {
                 type: PlayerState.BLOCKING,
+                blockstun: 0
+            };
+
+        // instant block
+        } else if(action == "_IB" && canAct(states[player])) {
+            states[player] = {
+                type: PlayerState.INSTANT_BLOCKING,
+                blockstun: 0
+            };
+
+        // crouch instant block
+        } else if(action == "_CIB" && canAct(states[player])) {
+            states[player] = {
+                type: PlayerState.CROUCH_INSTANT_BLOCKING,
                 blockstun: 0
             };
 
@@ -211,7 +236,7 @@ function processStateInteraction(frame, states, frames, characters) {
                 && !states[player].connected) {
 
                 newStates[player].connected = true;
-                var blockstunAmt = Characters.blockstun(move.level, false);
+                var blockstunAmt = Characters.blockstun(move.level, isInstantBlocking(states[other]));
                 // cornercase: if already blocking, we need to add +1 frame because
                 // we decrement one too many times
                 if(states[other].blockstun > 0)
