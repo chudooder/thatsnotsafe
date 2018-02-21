@@ -1,6 +1,14 @@
 <template>
     <div class="sidebar">
         <div class="sidebar-header">
+            Universal Actions
+        </div>
+        <SidebarRow
+            v-for="(action, name, index) in actions"
+            :key="name"
+            :name="name"
+            :index="index"></SidebarRow>
+        <div class="sidebar-header">
             {{ charName }}
         </div>
         <SidebarRow
@@ -8,7 +16,7 @@
             :key="name"
             :move="move"
             :name="name"
-            :index="index"/>
+            :index="index"></SidebarRow>
     </div>
 </template>
 
@@ -19,7 +27,8 @@
         components: { SidebarRow },
         props: {
             charName: String,
-            moves: Object
+            moves: Object,
+            actions: Object
         }
     }
 </script>

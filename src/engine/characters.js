@@ -743,6 +743,12 @@ var Characters = (() => {
         }
     };
 
+    var universalActions = {
+        "_B": { "name": "Block" },
+        "_CB": { "name": "Crouch Block" },
+        "_C": { "name": "Crouch" }
+    }
+
     var _stunTable = [
     //   SH  CH  AU  GB  GIB GFD AB  AIB AFD 
         [10, 10, 10, 9,  7,  11, 9,  3,  11],
@@ -769,6 +775,7 @@ var Characters = (() => {
 
     return {
         data: data,
+        universalActions: universalActions,
         hitstun: hitstun,
         blockstun: blockstun,
         cancelAllowed: cancelAllowed,

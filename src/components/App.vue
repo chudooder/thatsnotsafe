@@ -2,7 +2,8 @@
     <div>
         <Sidebar
             :charName="characters[0]"
-            :moves="getCharacterMoves(0)"/>
+            :moves="getCharacterMoves(0)"
+            :actions="getUniversalActions()"/>
 
         <div class="timeline">
             <!-- Timeline header -->
@@ -52,6 +53,10 @@
             getCharacterMoves: function(player) {
                 var charName = this.characters[player];
                 return Characters.data[charName].moves;
+            },
+
+            getUniversalActions: function() {
+                return Characters.universalActions;
             }
         },
 
