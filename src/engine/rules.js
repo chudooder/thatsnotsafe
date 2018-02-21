@@ -70,6 +70,7 @@ function startOfHitbox(move, duration) {
 
 function canAct(state) {
     return state.type === PlayerState.NEUTRAL
+        || state.type === PlayerState.CROUCHING
         || (isBlocking(state) && state.blockstun === 0);
 }
 
@@ -124,6 +125,10 @@ function processStateChangingActions(frame, actions, states, characters) {
         // crouch
         } else if(action == "_C" && canAct(states[player])) {
             states[player] = {type: PlayerState.CROUCHING};
+
+        // crouch
+        } else if(action == "_S" && canAct(states[player])) {
+            states[player] = {type: PlayerState.NEUTRAL};
 
         // crouching block
         } else if(action == "_CB" && canAct(states[player])) {
