@@ -20,7 +20,7 @@
     export default {
         components: { SidebarSection },
         props: {
-            characters: String
+            characters: Array
         },
         methods: {
             getUniversalActions : function() {
