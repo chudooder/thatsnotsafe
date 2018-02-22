@@ -3,6 +3,12 @@
 var Characters = (() => {
     var data = {
         "Elphelt": {
+            "defenseModifier": 1.03,
+            "guts": 0,
+            "stunResistance": 60,
+            "jumpStartup": 3,
+            "backdashTime": 13,
+            "backdashInvul": [1, 9],
             "moves": {
                 "5P": {
                     "key": "5P",
@@ -472,7 +478,8 @@ var Characters = (() => {
                         3
                     ], 
                     "total_active": 3, 
-                    "recovery": 5, 
+                    "recovery": 29,
+                    "recovery_after_landing": 5, 
                     "gatling": []
                 }, 
                 "6P": {
@@ -595,6 +602,7 @@ var Characters = (() => {
                     "recovery": 19, 
                     "gatling": []
                 },
+                /*
                 "236P>4P(Early)": {
                     "key": "236P>4P(Early)",
                     "type": "special",
@@ -738,7 +746,50 @@ var Characters = (() => {
                     "total_active": 0, 
                     "recovery": 36, 
                     "gatling": []
+                },
+                */
+                "214K": {
+                    "key": "214K",
+                    "type": "special",
+                    "name": "Bridal Express",
+                    "damage": [45],
+                    "tension": 720,
+                    "risc_hit": -6,
+                    "risc_gain": +14,
+                    "prorate_type": "initial",
+                    "prorate_amount": 0.9,
+                    "level": 3,
+                    "guard": "All",
+                    "cancel": "-",
+                    "roman": "YRP",
+                    "startup": 14,
+                    "active": [12],
+                    "total_active": 12,
+                    "recovery": 12,
+                    "gatling": []
+                },
+                /*
+                "j.214K": {
+                    "key": "214K",
+                    "type": "special",
+                    "name": "Bridal Express",
+                    "damage": [40],
+                    "tension": 720,
+                    "risc_hit": -7,
+                    "risc_gain": +10,
+                    "prorate_type": "initial",
+                    "prorate_amount": 0.9,
+                    "level": 2,
+                    "guard": "All",
+                    "cancel": "-",
+                    "roman": "YRP",
+                    "startup": 26,
+                    "active": [20],
+                    "total_active": 20,
+                    "recovery": 7,
+                    "gatling": []
                 }
+                */
             }
         }
     };
@@ -751,7 +802,9 @@ var Characters = (() => {
         "_C": { "name": "Crouch" },
         "_CB": { "name": "Crouch Block" },
         "_CIB": { "name": "Crouch Instant Block" },
-        "_CFD": { "name": "Crouch Faultless Defense" }
+        "_CFD": { "name": "Crouch Faultless Defense" },
+        "_J": { "name": "Jump" },
+        "_L": { "name": "Land" }
     }
 
     var _stunTable = [
@@ -775,17 +828,22 @@ var Characters = (() => {
         return _stunTable[level][column];
     };
 
-    function cancelAllowed(curMove, newMove) {
+    function attackCancelAllowed(curMove, newMove) {
         return (curMove.gatling.indexOf(newMove.key) != -1)
             || (newMove.type === 'special' && curMove.cancel.indexOf('S') != -1);
     };
+
+    function jumpCancelAllowed(curMove) {
+        return curMove.cancel.indexOf('J') != -1;
+    }
 
     return {
         data: data,
         universalActions: universalActions,
         hitstun: hitstun,
         blockstun: blockstun,
-        cancelAllowed: cancelAllowed,
+        attackCancelAllowed: attackCancelAllowed,
+        jumpCancelAllowed: jumpCancelAllowed
     }
 })();
 

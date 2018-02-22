@@ -10,9 +10,11 @@ var PlayerState = {
     INSTANT_BLOCKING: 4,
     CROUCH_INSTANT_BLOCKING: 5,
     FAULTLESS_DEFENSE: 6,
-    CROUCH_FAUTLESS_DEFENSE: 7,
+    CROUCH_FAULTLESS_DEFENSE: 7,
     ATTACKING: 8,
     HITSTUN: 9,
+    JUMPSQUAT: 10,
+    LANDING_RECOVERY: 11
 }
 
 var FrameType = {
@@ -22,7 +24,9 @@ var FrameType = {
     ATTACK_ACTIVE_NO_HITBOX: 3,
     ATTACK_RECOVERY: 4,
     HITSTUN: 5,
-    BLOCKSTUN: 6
+    BLOCKSTUN: 6,
+    JUMPSQUAT: 7,
+    LANDING_RECOVERY: 8
 }
 
 function arrSum(arr) {
@@ -75,7 +79,7 @@ function canAct(state) {
         || (isBlocking(state) && state.blockstun === 0);
 }
 
-function cancellable(frameType) {
+function isActiveFrames(frameType) {
     return frameType === FrameType.ATTACK_ACTIVE
         || frameType === FrameType.ATTACK_ACTIVE_NO_HITBOX;
 }
@@ -84,12 +88,20 @@ function cancellable(frameType) {
 // the gatling combination is allowed.
 function canAttack(frame, state, newMove) {
     return canAct(state) ||
-
         // regular gatling condition
         (state.type === PlayerState.ATTACKING
         && state.connected
-        && cancellable(getAttackFrameType(state.move, frame - state.startFrame + 1))
-        && Characters.cancelAllowed(state.move, newMove));
+        && isActiveFrames(getAttackFrameType(state.move, frame - state.startFrame + 1))
+        && Characters.attackCancelAllowed(state.move, newMove));
+}
+
+function canJump(frame, state) {
+    return canAct(state) ||
+        // can jump if attacking with JC-able move
+        (state.type === PlayerState.ATTACKING
+        && state.connected
+        && isActiveFrames(getAttackFrameType(state.move, frame - state.startFrame + 1))
+        && Characters.jumpCancelAllowed(state.move));
 }
 
 function isBlocking(state) {
@@ -98,7 +110,7 @@ function isBlocking(state) {
         || state.type === PlayerState.INSTANT_BLOCKING
         || state.type === PlayerState.CROUCH_INSTANT_BLOCKING
         || state.type === PlayerState.FAULTLESS_DEFENSE
-        || state.type === PlayerState.CROUCH_FAUTLESS_DEFENSE;
+        || state.type === PlayerState.CROUCH_FAULTLESS_DEFENSE;
 }
 
 function isInstantBlocking(state) {
@@ -108,7 +120,7 @@ function isInstantBlocking(state) {
 
 function isFaultlessBlocking(state) {
     return state.type === PlayerState.FAULTLESS_DEFENSE
-        || state.type === PlayerState.CROUCH_FAUTLESS_DEFENSE;
+        || state.type === PlayerState.CROUCH_FAULTLESS_DEFENSE;
 }
 
 function isCrouching(state) {
@@ -122,7 +134,7 @@ function blocksMove(state, move) {
         || isCrouching(state) && !move.guard.startsWith('High'));
 }
 
-function processStateChangingActions(frame, actions, states, characters) {
+function processInitialStateChangingActions(frame, actions, states, characters) {
     for(var player = 0; player <= 1; player++) {    
         var action = actions[player][frame];
 
@@ -132,64 +144,55 @@ function processStateChangingActions(frame, actions, states, characters) {
 
         // crouch
         } else if(action == "_C" && canAct(states[player])) {
-            states[player] = {type: PlayerState.CROUCHING};
+            states[player].type = PlayerState.CROUCHING;
 
         // crouch
         } else if(action == "_S" && canAct(states[player])) {
-            states[player] = {type: PlayerState.NEUTRAL};
+            states[player].type = PlayerState.NEUTRAL;
 
         // crouching block
         } else if(action == "_CB" && canAct(states[player])) {
-            states[player] = {
-                type: PlayerState.CROUCH_BLOCKING,
-                blockstun: 0
-            };
+            states[player].type = PlayerState.CROUCH_BLOCKING;
+            states[player].blockstun = 0;
 
         // standing block
         } else if(action == "_SB" && canAct(states[player])) {
-            states[player] = {
-                type: PlayerState.BLOCKING,
-                blockstun: 0
-            };
+            states[player].type = PlayerState.BLOCKING;
+            states[player].blockstun = 0;
 
         // instant block
         } else if(action == "_IB" && canAct(states[player])) {
-            states[player] = {
-                type: PlayerState.INSTANT_BLOCKING,
-                blockstun: 0
-            };
+            states[player].type = PlayerState.INSTANT_BLOCKING;
+            states[player].blockstun = 0;
 
         // crouch instant block
         } else if(action == "_CIB" && canAct(states[player])) {
-            states[player] = {
-                type: PlayerState.CROUCH_INSTANT_BLOCKING,
-                blockstun: 0
-            };
+            states[player].type = PlayerState.CROUCH_INSTANT_BLOCKING;
+            states[player].blockstun = 0;
 
         // standing faultless defense
         } else if(action == "_FD" && canAct(states[player])) {
-            states[player] = {
-                type: PlayerState.FAULTLESS_DEFENSE,
-                blockstun: 0
-            };
+            states[player].type = PlayerState.FAULTLESS_DEFENSE;
+            states[player].blockstun = 0;
 
         // crouching faultless defense
         } else if(action == "_CFD" && canAct(states[player])) {
-            states[player] = {
-                type: PlayerState.CROUCH_FAUTLESS_DEFENSE,
-                blockstun: 0
-            };
+            states[player].type = PlayerState.CROUCH_FAULTLESS_DEFENSE;
+            states[player].blockstun = 0;
+
+        // jump
+        } else if(action == "_J" && canJump(frame, states[player])) {
+            states[player].type = PlayerState.JUMPSQUAT;
+            states[player].jumpsquat = Characters.data[characters[player]].jumpStartup;
 
         // all other actions treated as attacks
-        } else {
+        } else if(!action.startsWith("_")) {
             var newMove = Characters.data[characters[player]].moves[action];
             if(canAttack(frame, states[player], newMove)) {
-                states[player] = {
-                    type: PlayerState.ATTACKING,
-                    startFrame: frame,
-                    move: newMove,
-                    connected: false
-                };
+                states[player].type = PlayerState.ATTACKING;
+                states[player].startFrame = frame;
+                states[player].move = newMove;
+                states[player].connected = false;
             }
         }
     }
@@ -211,6 +214,14 @@ function processFrameType(frame, states, frames) {
 
         else if(isBlocking(states[player]) && states[player].blockstun > 0) {
             frameType = FrameType.BLOCKSTUN;
+        }
+
+        else if(states[player].type == PlayerState.JUMPSQUAT) {
+            frameType = FrameType.JUMPSQUAT;
+        }
+
+        else if(states[player].type == PlayerState.LANDING_RECOVERY) {
+            frameType = FrameType.LANDING_RECOVERY;
         }
 
         frames[player].push(frameType);
@@ -250,10 +261,8 @@ function processStateInteraction(frame, states, frames, characters) {
                 if(states[other].hitstun > 0)
                     hitstunAmt++;
 
-                newStates[other] = {
-                    type: PlayerState.HITSTUN,
-                    hitstun: hitstunAmt
-                };
+                newStates[other].type = PlayerState.HITSTUN;
+                newStates[other].hitstun = hitstunAmt;
             }
 
             // if we have active frames and they are blocking,
@@ -276,7 +285,7 @@ function processStateInteraction(frame, states, frames, characters) {
 
             // if last frame of move, return to neutral
             if(lastFrameOfMove(frame, states[player])) {
-                newStates[player] = { type: PlayerState.NEUTRAL };
+                newStates[player].type = PlayerState.NEUTRAL;
             }
         }
 
@@ -284,15 +293,31 @@ function processStateInteraction(frame, states, frames, characters) {
         else if(states[player].type == PlayerState.HITSTUN) {
             newStates[player].hitstun -= 1;
             if(newStates[player].hitstun == 0) {
-                newStates[player] = { type: PlayerState.NEUTRAL };
+                newStates[player].type = PlayerState.NEUTRAL;
             }
         }
 
-        // if in hitstun, decrease hitstun timer and change to neutral if necessary
+        // if in blockstun, decrease hitstun timer and change to neutral if necessary
         else if(isBlocking(states[player]) && states[player].blockstun > 0) {
             newStates[player].blockstun -= 1;
             if(newStates[player].blockstun == 0) {
-                newStates[player] = { type: PlayerState.NEUTRAL };
+                newStates[player].type = PlayerState.NEUTRAL;
+            }
+        }
+
+        // if in jumpsquat, decrease jumpsquat timer
+        else if(states[player].type == PlayerState.JUMPSQUAT) {
+            newStates[player].jumpsquat -= 1;
+            if(newStates[player].jumpsquat == 0) {
+                newStates[player].type = PlayerState.NEUTRAL;
+                newStates[player].airborne = true;
+            }
+        }
+
+        else if(states[player].type == PlayerState.LANDING_RECOVERY) {
+            newStates[player].landingRecovery -= 1;
+            if(newStates[player].landingRecovery == 0) {
+                newStates[player].type = PlayerState.NEUTRAL;
             }
         }
     }
@@ -301,17 +326,43 @@ function processStateInteraction(frame, states, frames, characters) {
     states[1] = newStates[1];
 }
 
+// These are for special case actions that should take place at the end of a frame.
+// For example, the _L (land) action is processed here so that users can input
+// moves on the first available neutral frame after landing.
+function processFinalStateChangingActions(frame, actions, states, characters) {
+    for(var player = 0; player <= 1; player++) {
+        var action = actions[player][frame];
+
+        // no action to be found
+        if(!action) {
+            continue;
+
+        // land
+        } else if(action == "_L" && states[player].airborne) {
+            if(states[player].type == PlayerState.ATTACKING && states[player].move.recovery_after_landing) {
+                states[player].type = PlayerState.LANDING_RECOVERY;
+                states[player].landingRecovery = states[player].move.recovery_after_landing;
+            } else {
+                states[player].type = PlayerState.NEUTRAL;
+            }
+            states[player].airborne = false;
+        }
+    }
+}
+
 // returns the calculated states for each frame for both characters
 // as two arrays.
 function calculateFrames(characters, actions) {
-    var states = [{type: PlayerState.NEUTRAL}, {type: PlayerState.NEUTRAL}];
+    var states = [
+        {type: PlayerState.NEUTRAL, airborne: false}, 
+        {type: PlayerState.NEUTRAL, airborne: false}];
     var frames = [[],[]];
     var curFrame = 0;
     var done = false;
 
     while(!done) {
         // change states
-        processStateChangingActions(curFrame, actions, states, characters);
+        processInitialStateChangingActions(curFrame, actions, states, characters);
 
         // write frame types
         processFrameType(curFrame, states, frames);
@@ -320,6 +371,10 @@ function calculateFrames(characters, actions) {
 
         // resolve states
         processStateInteraction(curFrame, states, frames, characters);
+
+        // final state changing actions
+        processFinalStateChangingActions(curFrame, actions, states, characters);
+
 
         // finish if both players in neutral and no more actions
         if(actions[0][curFrame] === undefined 

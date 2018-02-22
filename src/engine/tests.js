@@ -312,6 +312,31 @@ function runTests() {
             ]), res[1]);
     });
 
+    test("jump-cancel", () => {
+        var res = Rules.calculateFrames(["Elphelt", "Elphelt"], [["c.S", null, null, null, null, "_J"], []]);
+        assertArrays(expand([
+                [FrameType.ATTACK_STARTUP, 4],
+                [FrameType.ATTACK_ACTIVE, 1],
+                [FrameType.JUMPSQUAT, 3],
+                [FrameType.NEUTRAL, 15]
+            ]), res[0]);
+        assertArrays(expand([
+                [FrameType.NEUTRAL, 5],
+                [FrameType.HITSTUN, 17],
+                [FrameType.NEUTRAL, 1]
+            ]), res[1]);
+    });
+
+    test("landing-recovery", () => {
+        var res = Rules.calculateFrames(["Elphelt", "Elphelt"], [["_J", null, null, "j.D", null, "_L"], []]);
+        assertArrays(expand([
+                [FrameType.JUMPSQUAT, 3],
+                [FrameType.ATTACK_STARTUP, 3],
+                [FrameType.LANDING_RECOVERY, 5],
+                [FrameType.NEUTRAL, 1]
+            ]), res[0]);
+    });
+
     console.log(numPassed + " / " + numTests + " tests passed.");
 }
 

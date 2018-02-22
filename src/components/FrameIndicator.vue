@@ -29,6 +29,10 @@
                         return "#ff1c1c";
                     case Rules.FrameType.BLOCKSTUN:
                         return "#275fea";
+                    case Rules.FrameType.JUMPSQUAT:
+                        return "#333333";
+                    case Rules.FrameType.LANDING_RECOVERY:
+                        return "#9b044b";
                 }
             },
 
@@ -48,6 +52,10 @@
                         return "Hitstun";
                     case Rules.FrameType.BLOCKSTUN:
                         return "Blockstun";
+                    case Rules.FrameType.JUMPSQUAT:
+                        return "Jump Startup"
+                    case Rules.FrameType.LANDING_RECOVERY:
+                        return "landing Recovery"
                 }
             },
 
