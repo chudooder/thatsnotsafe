@@ -43,10 +43,22 @@ body {
 
 .sidebar-header {
     padding-left: 15px;
-    height: 45px;
-    line-height: 45px;
+    height: 48px;
+    line-height: 48px;
     background-color: #111;
     color: #fff;
+}
+
+.sidebar-header-container {
+    height: 48px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.sidebar-header-container img {
+    height: 16px;
+    width: 16px;
+    margin: 16px;
 }
 
 .sidebar-row {

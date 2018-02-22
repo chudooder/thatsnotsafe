@@ -1,9 +1,6 @@
 <template>
     <div>
-        <Sidebar
-            :charName="characters[0]"
-            :moves="getCharacterMoves(0)"
-            :actions="getUniversalActions()"/>
+        <Sidebar :characters="characters"/>
 
         <div class="timeline">
             <!-- Timeline header -->

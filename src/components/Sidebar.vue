@@ -1,35 +1,35 @@
 <template>
     <div class="sidebar">
-        <div class="sidebar-header">
-            Universal Actions
-        </div>
-        <SidebarRow
-            v-for="(action, name, index) in actions"
-            :key="name"
-            :action="action"
-            :name="name"
-            :index="index"></SidebarRow>
-        <div class="sidebar-header">
-            {{ charName }}
-        </div>
-        <SidebarRow
-            v-for="(move, name, index) in moves"
-            :key="name"
-            :move="move"
-            :name="name"
-            :index="index"></SidebarRow>
+        <SidebarSection
+            :sectionName="'Universal Actions'"
+            :actions="getUniversalActions()"></SidebarSection>
+        <SidebarSection
+            :sectionName="characters[0]"
+            :moves="getMoves(characters[0])"></SidebarSection>
+        <SidebarSection
+            v-if="characters[0] != characters[1]"
+            :sectionName="characters[1]"
+            :moves="getMoves(characters[1])"></SidebarSection>
     </div>
 </template>
 
 <script>
-    import SidebarRow from './SidebarRow.vue';
+    import SidebarSection from './SidebarSection.vue';
+    import Characters from '../engine/characters.js'
 
     export default {
-        components: { SidebarRow },
+        components: { SidebarSection },
         props: {
-            charName: String,
-            moves: Object,
-            actions: Object
+            characters: String
+        },
+        methods: {
+            getUniversalActions : function() {
+                return Characters.universalActions;
+            },
+
+            getMoves : function(charName) {
+                return Characters.data[charName].moves;
+            }
         }
     }
 </script>
