@@ -768,7 +768,6 @@ var Characters = (() => {
                     "recovery": 12,
                     "gatling": []
                 },
-                /*
                 "j.214K": {
                     "key": "214K",
                     "type": "special",
@@ -786,10 +785,51 @@ var Characters = (() => {
                     "startup": 26,
                     "active": [20],
                     "total_active": 20,
-                    "recovery": 7,
+                    "recovery": 0,
+                    "recovery_after_landing": 7,
                     "gatling": []
-                }
-                */
+                },
+                /*
+                "236S": {
+                    "key": "236S",
+                    "type": "special",
+                    "name": "Miss Confire",
+                    "damage": [0],
+                    "tension": 150,
+                    "risc_hit": 0,
+                    "risc_gain": 0,
+                    "prorate_type": null,
+                    "prorate_amount": 1.0,
+                    "level": 0,
+                    "guard": "-",
+                    "cancel": "-",
+                    "roman": "Y",
+                    "startup": 0,
+                    "active": [0],
+                    "total_active": 0,
+                    "recovery": 27,
+                    "gatling": []
+                },
+                "Confire>P/K/S/H": {
+                    "key": "Confire>P/K/S/H",
+                    "type": "special",
+                    "name": "Miss Confire - Fire",
+                    "damage": [35],
+                    "tension": 320,
+                    "risc_hit": -6,
+                    "risc_gain": 2,
+                    "prorate_type": null,
+                    "prorate_amount": 1.0,
+                    "level": 3,
+                    "guard": "Mid",
+                    "cancel": "-",
+                    "roman": "YRP",
+                    "startup": 3,
+                    "active": [3],
+                    "total_active": 3,
+                    "recovery": 47,
+                    "gatling": [""]
+                } */
             }
         }
     };
