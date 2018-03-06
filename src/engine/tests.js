@@ -189,22 +189,6 @@ function runTests() {
             ]), res[1]);
     });
 
-    test("gatling-fail-recovery", () => {
-        var res = Rules.calculateFrames(["Elphelt", "Elphelt"], 
-            [["5P", null, null, null, null, null, null, "5K"], []]);
-        assertArrays(expand([
-                [FrameType.ATTACK_STARTUP, 4],
-                [FrameType.ATTACK_ACTIVE, 3],
-                [FrameType.ATTACK_RECOVERY, 5],
-                [FrameType.NEUTRAL, 4]
-            ]), res[0]);
-        assertArrays(expand([
-                [FrameType.NEUTRAL, 5],
-                [FrameType.HITSTUN, 10],
-                [FrameType.NEUTRAL, 1]
-            ]), res[1]);
-    });
-
     test("gatling-fail-no-route", () => {
         var res = Rules.calculateFrames(["Elphelt", "Elphelt"], [["c.S", null, null, null, null, "5K"], ["_C"]]);
         assertArrays(expand([

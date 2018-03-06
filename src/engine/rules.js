@@ -79,9 +79,17 @@ function canAct(state) {
         || (isBlocking(state) && state.blockstun === 0);
 }
 
+function isStartupFrames(frameType) {
+    return frameType === FrameType.ATTACK_STARTUP;
+}
+
 function isActiveFrames(frameType) {
     return frameType === FrameType.ATTACK_ACTIVE
         || frameType === FrameType.ATTACK_ACTIVE_NO_HITBOX;
+}
+
+function isRecoveryFrames(frameType) {
+    return frameType === FrameType.ATTACK_RECOVERY
 }
 
 // can attack if in an acting state, or if the current move has connected and
@@ -91,7 +99,7 @@ function canAttack(frame, state, newMove) {
         // regular gatling condition
         (state.type === PlayerState.ATTACKING
         && state.connected
-        && isActiveFrames(getAttackFrameType(state.move, frame - state.startFrame + 1))
+        && !isStartupFrames(getAttackFrameType(state.move, frame - state.startFrame + 1))
         && Characters.attackCancelAllowed(state.move, newMove));
 }
 
