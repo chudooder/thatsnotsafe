@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import json
+import re
 from collections import OrderedDict
 
 def parseList(str):
@@ -68,6 +69,7 @@ def getMoveData(table):
         prorateType, prorateAmount = parseProrate(row[4])
 
         move = OrderedDict()
+        move["key"] = name
         move["hits"] = len(damage)
         move["damage"] = damage
         move["tension"] = parseInt(row[2])
@@ -103,11 +105,12 @@ def addGatlings(table, data):
         move = row[0]
         gatlings = []
         for str in row[1:-1]:
-            options = [s.strip() for s in str.replace('[+]', '').split(',') if s.strip() != '-']
+            options = [s.strip() for s in re.split(r'[, ]', str.replace('[+]', '')) if s.strip() != '-']
+            options = [s for s in options if s != ""]
             gatlings.extend(options)
         data[move]["gatling"] = gatlings
 
-soup = BeautifulSoup(open('data/elphelt.html').read(), 'html.parser')
+soup = BeautifulSoup(open('data/chipp.html').read(), 'html.parser')
 
 tables = soup.find_all('table')
 print(len(tables))
@@ -117,6 +120,6 @@ data = getMoveData(tables[0])
 addGatlings(tables[5], data)
 addGatlings(tables[6], data)
 # universal = getMoveData(tables[1])
-special = getMoveData(tables[2])
+# special = getMoveData(tables[2])
 
-json.dump(data, open('elphelt.json', 'w'), indent=4)
+json.dump(data, open('data/chipp.json', 'w'), indent=4)

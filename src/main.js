@@ -21,8 +21,8 @@ var trimActions = function(arr) {
 
 const store = new Vuex.Store({
     state: {
-        characters: ["Elphelt", "Elphelt"],
-        actions: [["5K", null, null, null, null, null, null, "f.S"], ["_SB"]],
+        characters: ["Chipp", "Elphelt"],
+        actions: [["5K"], ["_SB"]],
         frameData: [[],[]],
         moveSelected: false
     },
