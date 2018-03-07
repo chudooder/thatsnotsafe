@@ -22,7 +22,8 @@
                 :key="name"
                 :move="move"
                 :name="name"
-                :index="index"></SidebarRow>
+                :index="index"
+                :character="character"></SidebarRow>
         </div>
     </div>
 </template>
@@ -35,7 +36,8 @@
         props: {
             sectionName: String,
             actions: Object,
-            moves: Object
+            moves: Object,
+            character: String
         },
         
         data: function() {

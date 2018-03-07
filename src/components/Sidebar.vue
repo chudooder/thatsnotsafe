@@ -5,11 +5,13 @@
             :actions="getUniversalActions()"></SidebarSection>
         <SidebarSection
             :sectionName="characters[0]"
-            :moves="getMoves(characters[0])"></SidebarSection>
+            :moves="getMoves(characters[0])"
+            :character="characters[0]"></SidebarSection>
         <SidebarSection
             v-if="characters[0] != characters[1]"
             :sectionName="characters[1]"
-            :moves="getMoves(characters[1])"></SidebarSection>
+            :moves="getMoves(characters[1])"
+            :character="characters[1]"></SidebarSection>
     </div>
 </template>
 

@@ -21,10 +21,10 @@ var trimActions = function(arr) {
 
 const store = new Vuex.Store({
     state: {
-        characters: ["Chipp", "Elphelt"],
+        characters: ["Elphelt", "Elphelt"],
         actions: [["5K"], ["_SB"]],
         frameData: [[],[]],
-        moveSelected: false
+        selectedMove: null
     },
 
     mutations: {
@@ -48,12 +48,12 @@ const store = new Vuex.Store({
             state.frameData = Rules.calculateFrames(state.characters, state.actions);
         },
 
-        selectMove: function(state) {
-            state.moveSelected = true;
+        selectMove: function(state, payload) {
+            state.selectedMove = payload;
         },
 
         deselectMove: function(state) {
-            state.moveSelected = false;
+            state.selectedMove = null;
         }
     }
 });

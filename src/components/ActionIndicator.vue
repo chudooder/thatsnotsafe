@@ -25,7 +25,7 @@
             hovering: false,
         }},
 
-        computed: mapState(['moveSelected']),
+        computed: mapState(['selectedMove', 'characters']),
 
         methods: {
             cleanup: function(str) {
@@ -64,7 +64,7 @@
             },
 
             borderColor: function() {
-                if(this.moveSelected) {
+                if(this.selectedMove && this.canApply(this.selectedMove)) {
                     return '#aaa';
                 } else {
                     return '#0000';
@@ -73,12 +73,19 @@
 
             drop: function(event) {
                 event.preventDefault();
-                var name = event.dataTransfer.getData("name");
-                this.$store.commit('addAction', {
-                    player: this.player,
-                    frame: this.frame,
-                    name: name
-                });
+                if(this.canApply(this.selectedMove)) {
+                    var name = event.dataTransfer.getData("name");
+                    this.$store.commit('addAction', {
+                        player: this.player,
+                        frame: this.frame,
+                        name: name
+                    });
+                }
+            },
+
+            canApply: function(movePayload) {
+                return !movePayload.character
+                    || movePayload.character === this.characters[this.player];
             }
         }
     }

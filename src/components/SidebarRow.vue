@@ -23,13 +23,18 @@
             "move": Object,
             "action": Object,
             "name": String,
-            "index": Number
+            "index": Number,
+            "character": String
         },
 
         methods: {
             dragStart: function(event) {
                 event.dataTransfer.setData("name", this.name);
-                this.$store.commit('selectMove');
+                this.$store.commit('selectMove', {
+                    move: this.move,
+                    action: this.action,
+                    character: this.character
+                });
             },
 
             dragEnd: function(event) {

@@ -38,7 +38,7 @@
             frame: Number
         },
 
-        computed: mapState(['actions', 'frameData'])
+        computed: mapState(['actions', 'characters', 'frameData'])
     }
 
 </script>
