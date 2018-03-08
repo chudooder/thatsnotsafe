@@ -54,6 +54,10 @@ const store = new Vuex.Store({
 
         deselectMove: function(state) {
             state.selectedMove = null;
+        },
+
+        setCharacter: function(state, payload) {
+            state.characters[payload.player] = payload.character;
         }
     }
 });

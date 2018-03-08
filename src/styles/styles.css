@@ -9,6 +9,19 @@
 
 body {
     font-family: 'Mukta Mahee', sans-serif;
+    font-size: 12pt;
+}
+
+.select-char {
+    width: 100px;
+    height: 25px;
+}
+
+.select-char select {
+    width: 100px;
+    height: 25px;
+    background-color: #fff;
+    font-family: 'Mukta Mahee', sans-serif;
 }
 
 /* globalish */
@@ -43,14 +56,17 @@ body {
 
 .sidebar-header {
     padding-left: 15px;
-    height: 48px;
-    line-height: 48px;
+    height: 46px;
+    line-height: 46px;
+    border-bottom-width: 2px;
+    border-bottom-color: #000;
+    border-bottom-style: solid;
     background-color: #111;
     color: #fff;
 }
 
 .sidebar-header-container {
-    height: 48px;
+    height: 46px;
     display: inline-block;
     vertical-align: middle;
 }
@@ -117,6 +133,7 @@ body {
 
 .header-col {
     height: var(--col-height);
+    margin: 10px 0px;
     display: inline-block;
     vertical-align: top;
 }
@@ -126,6 +143,14 @@ body {
     line-height: var(--square-size);
     display: block;
     text-align: center;
+}
+
+.header-divider {
+    height: 2px;
+    /*margin-top: calc((var(--square-size) - 2) / 2);*/
+    /*margin-bottom: calc((var(--square-size) - 2) / 2);*/
+    margin: 17px 0px;
+    background-color: #ccc;
 }
 
 .header-row span {
@@ -171,7 +196,6 @@ body {
     border-width: var(--inner-border);
     border-color: #111;
     border-radius: 4px;
-    transition: background-color 0.5s;
 }
 
 /* Tooltip stuff */

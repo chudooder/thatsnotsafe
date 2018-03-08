@@ -4,6 +4,7 @@
   "description": "A Vue.js project",
   "author": "chudooder <codeshawnachu@gmail.com>",
   "dependencies": {
+    "velocity-animate": "^1.5.1",
     "vue": "^2.5.13",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"

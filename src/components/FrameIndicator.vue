@@ -1,5 +1,5 @@
 <template>
-    <div class="frame-indicator" :style="{backgroundColor: toColor(frameType)}">
+    <div class="frame-indicator" :style="{backgroundColor: color}">
         <span class="frame-tooltip unselectable" :style=getTooltipStyle(top) >{{ toString(frameType) }}</span>
     </div>
 </template>
@@ -12,6 +12,13 @@
             frameType: Number,
             top: Boolean
         },
+
+        computed: {
+            color: function() {
+                return this.toColor(this.frameType);
+            }
+        },
+
         methods: {
             toColor: function(frameType) {
                 switch(frameType) {
@@ -55,7 +62,7 @@
                     case Rules.FrameType.JUMPSQUAT:
                         return "Jump Startup"
                     case Rules.FrameType.LANDING_RECOVERY:
-                        return "landing Recovery"
+                        return "Landing Recovery"
                 }
             },
 
@@ -65,6 +72,16 @@
                 } else {
                     return {bottom: "120%"};
                 }
+            }
+        },
+
+        watch: {
+            color: function(newColor) {
+                Velocity(
+                    this.$el,
+                    { backgroundColor: newColor },
+                    { duration: 500 }
+                );
             }
         }
     }
