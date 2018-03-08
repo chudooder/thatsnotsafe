@@ -6,6 +6,9 @@ import Rules from './engine/rules.js';
 
 import Tests from './engine/tests.js';
 
+import styles from './styles/styles.css'
+import anims from './styles/animation.css'
+
 Vue.use(Vuex);
 
 // helper functions
