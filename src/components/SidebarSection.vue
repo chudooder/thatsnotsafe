@@ -5,7 +5,7 @@
             @click="hidden = !hidden">
             <div class="sidebar-header-container" style="display:inline-block"> {{ sectionName }} </div>
             <div class="sidebar-header-container" style="float:right">
-                <img :style=getArrowStyle() src="./img/menu-arrow.png">
+                <img :style=getArrowStyle() src="~./img/menu-arrow.png">
             </div>
         </div>
         <div v-if="!hidden">
