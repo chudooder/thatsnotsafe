@@ -1,6 +1,7 @@
 const path = require('path');
+const webpack = require('webpack');
 
-module.exports = {
+const config = {
   // This is the "main" file which should include all other modules
   entry: './src/main.js',
   // Where should the compiled file go?
@@ -13,38 +14,46 @@ module.exports = {
   },
   module: {
     // Special compilation rules
-    loaders: [
+    rules: [
       {
         // Ask webpack to check: If this file ends with .js, then apply some transforms
         test: /\.js$/,
         // Transform it with babel
-        loader: 'babel',
+        loader: 'babel-loader',
         // don't transform node_modules folder (which don't need to be compiled)
         exclude: /node_modules/
       },
       {
         test: /\.vue$/,
-        loader: 'vue'
+        loader: 'vue-loader'
       },
       { 
         test: /\.(jpe?g|gif|png|svg|woff|ttf|wav|mp3)$/,
-        loader: "file"
+        loader: "url-loader"
       },
       {
         test: /\.css$/,
-        loaders: ['style', 'css']
+        loaders: ['style-loader', 'css-loader']
       }
     ]
   },
-  vue: {
-    loaders: {
-      js: 'babel'
-    }
-  },
+  plugins: [
+    new webpack.LoaderOptionsPlugin({
+      options: {
+        vue: {
+          loaders: {
+            js: 'babel-loader'
+          }
+        },
+      }
+    })
+  ],
   resolve: {
     alias: {
       vue: 'vue/dist/vue.js'
     },
-    modulesDirectories: ['./node_modules']
+    modules: ['./node_modules']
   }
 }
+
+module.exports = config;
