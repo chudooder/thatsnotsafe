@@ -6,6 +6,7 @@
 
 <script>
     import Rules from '../engine/rules.js';
+    import Velocity from 'velocity-animate'
 
     export default {
         props: {

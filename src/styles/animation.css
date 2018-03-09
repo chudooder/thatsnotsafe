@@ -1,6 +1,8 @@
-.timeline-item {
-    transition: opacity 0.5s;
-}
-.timeline-enter, .timeline-leave-to /* .fade-leave-active below version 2.1.8 */ {
+.column-slide-enter, .column-slide-leave-to {
     opacity: 0;
+    transform: translateY(-10px);
+}
+
+.column-slide-enter-active, .column-slide-leave-active {
+    transition: all 0.5s ease;
 }
