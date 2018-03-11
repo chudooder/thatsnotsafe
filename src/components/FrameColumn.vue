@@ -8,13 +8,13 @@
                     :frame="frame-1"></ActionIndicator>
             </div>
             <div class="frame-row">
-                <FrameIndicator :top=true :frame-type="frameData[0][frame - 1]"></FrameIndicator>
+                <FrameIndicator :top=true :frameData="frameData[0][frame - 1]"></FrameIndicator>
             </div>
             <div class="frame-row">
                 <span>{{ frame }}</span>
             </div>
             <div class="frame-row">
-                <FrameIndicator :top=false :frame-type="frameData[1][frame - 1]"></FrameIndicator>
+                <FrameIndicator :top=false :frameData="frameData[1][frame - 1]"></FrameIndicator>
             </div>
             <div class="frame-row">
                 <ActionIndicator

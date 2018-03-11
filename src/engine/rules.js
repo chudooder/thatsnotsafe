@@ -62,10 +62,10 @@ function lastFrameOfMove(frame, state) {
 }
 
 function startOfHitbox(move, duration) {
-    var activeStart = move.startup - 1;
+    var activeStart = move.startup;
     var count = 0;
     for(var i = 0; i < move.active.length; i++) {
-        if(duration == activeStart + count) {
+        if(move.active[i] > 0 && duration == activeStart + count) {
             return true;
         }
         count += Math.abs(move.active[i]);
@@ -209,27 +209,32 @@ function processInitialStateChangingActions(frame, actions, states, characters) 
 function processFrameType(frame, states, frames) {
     for(var player = 0; player <= 1; player++) {
         var other = 1 - player;
-        var frameType = FrameType.NEUTRAL;
+        var frameType = {type: FrameType.NEUTRAL};
 
         // for attacking frames
         if(states[player].type == PlayerState.ATTACKING) {
-            frameType = getAttackFrameType(states[player].move, frame - states[player].startFrame + 1);
+            frameType.type = getAttackFrameType(states[player].move, frame - states[player].startFrame + 1);
+            if(startOfHitbox(states[player].move, frame - states[player].startFrame + 1)) {
+                frameType.startOfHitbox = true;
+            }
         }
 
         else if(states[player].type == PlayerState.HITSTUN) {
-            frameType = FrameType.HITSTUN;
+            frameType.type = FrameType.HITSTUN;
+            frameType.stun = states[player].hitstun;
         }
 
         else if(isBlocking(states[player]) && states[player].blockstun > 0) {
-            frameType = FrameType.BLOCKSTUN;
+            frameType.type = FrameType.BLOCKSTUN;
+            frameType.stun = states[player].blockstun;
         }
 
         else if(states[player].type == PlayerState.JUMPSQUAT) {
-            frameType = FrameType.JUMPSQUAT;
+            frameType.type = FrameType.JUMPSQUAT;
         }
 
         else if(states[player].type == PlayerState.LANDING_RECOVERY) {
-            frameType = FrameType.LANDING_RECOVERY;
+            frameType.type = FrameType.LANDING_RECOVERY;
         }
 
         frames[player].push(frameType);
@@ -254,7 +259,9 @@ function processStateInteraction(frame, states, frames, characters) {
 
         if(states[player].type == PlayerState.ATTACKING) {
             var move = states[player].move;
-            var frameType = getAttackFrameType(move, frame - states[player].startFrame + 1);
+            var duration = frame - states[player].startFrame + 1;
+            var level = move.level[Characters.hitboxIndex(move, duration)];
+            var frameType = getAttackFrameType(move, duration);
 
             // if we have active frames and they aren't blocking,
             // and we haven't hit them with the move, put them in hitstun
@@ -263,7 +270,7 @@ function processStateInteraction(frame, states, frames, characters) {
                 && !states[player].connected) {
 
                 newStates[player].connected = true;
-                var hitstunAmt = Characters.hitstun(move.level, isCrouching(states[other]));
+                var hitstunAmt = Characters.hitstun(level, isCrouching(states[other]));
                 // cornercase: if already in hitstun, we need to add +1 frame because
                 // we decrement one too many times
                 if(states[other].hitstun > 0)
@@ -281,7 +288,7 @@ function processStateInteraction(frame, states, frames, characters) {
 
                 newStates[player].connected = true;
                 var blockstunAmt = Characters.blockstun(
-                    move.level, 
+                    level, 
                     isInstantBlocking(states[other]),
                     isFaultlessBlocking(states[other]));
                 // cornercase: if already blocking, we need to add +1 frame because
@@ -393,8 +400,8 @@ function calculateFrames(characters, actions) {
             done = true;
 
             // add one additional neutral frame, for clarity.
-            frames[0].push(FrameType.NEUTRAL);
-            frames[1].push(FrameType.NEUTRAL);
+            frames[0].push({type: FrameType.NEUTRAL});
+            frames[1].push({type: FrameType.NEUTRAL});
         }
         curFrame++;
         // failsafe to prevent infinite loop bugs

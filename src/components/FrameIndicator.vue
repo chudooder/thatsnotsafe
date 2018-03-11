@@ -1,6 +1,6 @@
 <template>
-    <div class="frame-indicator" :style="{backgroundColor: color}">
-        <span class="frame-tooltip unselectable" :style=getTooltipStyle(top) >{{ toString(frameType) }}</span>
+    <div class="frame-indicator" :style="getStyle()">
+        <span class="frame-tooltip unselectable" :style=getTooltipStyle(top) >{{ toString(frameData) }}</span>
     </div>
 </template>
 
@@ -10,13 +10,17 @@
 
     export default {
         props: {
-            frameType: Number,
+            frameData: Object,
             top: Boolean
         },
 
         computed: {
             color: function() {
-                return this.toColor(this.frameType);
+                return this.toColor(this.frameData.type);
+            },
+
+            stripeBackground: function() {
+                return require('./img/black-twill.png');
             }
         },
 
@@ -44,8 +48,8 @@
                 }
             },
 
-            toString: function(frameType) {
-                switch(frameType) {
+            toString: function(frameData) {
+                switch(frameData.type) {
                     case Rules.FrameType.NEUTRAL:
                         return "Neutral";
                     case Rules.FrameType.ATTACK_STARTUP:
@@ -57,14 +61,25 @@
                     case Rules.FrameType.ATTACK_RECOVERY:
                         return "Recovery";
                     case Rules.FrameType.HITSTUN:
-                        return "Hitstun";
+                        return "Hitstun (" + frameData.stun + "F)";
                     case Rules.FrameType.BLOCKSTUN:
-                        return "Blockstun";
+                        return "Blockstun (" + frameData.stun + "F)";
                     case Rules.FrameType.JUMPSQUAT:
                         return "Jump Startup"
                     case Rules.FrameType.LANDING_RECOVERY:
                         return "Landing Recovery"
                 }
+            },
+
+            getStyle: function() {
+                var style = {};
+                style.backgroundColor = this.color;
+
+                if(this.frameData.startOfHitbox) {
+                    style.backgroundImage = 'url(' + this.stripeBackground + ')';
+                }
+
+                return style;
             },
 
             getTooltipStyle: function(top) {
