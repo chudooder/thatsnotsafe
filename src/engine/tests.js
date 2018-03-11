@@ -1,4 +1,5 @@
 import Rules from './rules.js';
+import Characters from './characters.js';
 
 var Tests = (() => {
 
@@ -6,6 +7,12 @@ var FrameType = Rules.FrameType;
 
 var numTests = 0;
 var numPassed = 0;
+
+function assertEqual(val1, val2) {
+    if(val1 != val2) {
+        throw "Expected:\n" + val1 + "\nbut got\n" + val2; 
+    }
+}
 
 function assertArrays(arr1, arr2) {
     if(arr1.length != arr2.length) {
@@ -58,6 +65,30 @@ function test(testName, func) {
 }
 
 function runTests() {
+    test("hitbox-index-1", () => {
+        var move = {
+            startup: 11,
+            active: [3, -3, 3]
+        }
+        assertEqual(0, Characters.hitboxIndex(move, 11));
+        assertEqual(0, Characters.hitboxIndex(move, 13));
+        assertEqual(-1, Characters.hitboxIndex(move, 14));
+        assertEqual(-1, Characters.hitboxIndex(move, 16));
+        assertEqual(1, Characters.hitboxIndex(move, 17));
+        assertEqual(1, Characters.hitboxIndex(move, 19));
+    });
+
+    test("hitbox-index-2", () => {
+        var move = {
+            startup: 1,
+            active: [6, 6]
+        }
+        assertEqual(0, Characters.hitboxIndex(move, 1));
+        assertEqual(0, Characters.hitboxIndex(move, 6));
+        assertEqual(1, Characters.hitboxIndex(move, 7));
+        assertEqual(1, Characters.hitboxIndex(move, 12));
+    });
+
     test("basic-hitstun", () => {
         var res = Rules.calculateFrames(["Elphelt", "Elphelt"], [["5P"], []]);
         assertArrays(expand([

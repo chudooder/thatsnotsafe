@@ -259,7 +259,9 @@ function processStateInteraction(frame, states, frames, characters) {
 
         if(states[player].type == PlayerState.ATTACKING) {
             var move = states[player].move;
-            var frameType = getAttackFrameType(move, frame - states[player].startFrame + 1);
+            var duration = frame - states[player].startFrame + 1;
+            var level = move.level[Characters.hitboxIndex(move, duration)];
+            var frameType = getAttackFrameType(move, duration);
 
             // if we have active frames and they aren't blocking,
             // and we haven't hit them with the move, put them in hitstun
@@ -268,7 +270,7 @@ function processStateInteraction(frame, states, frames, characters) {
                 && !states[player].connected) {
 
                 newStates[player].connected = true;
-                var hitstunAmt = Characters.hitstun(move.level, isCrouching(states[other]));
+                var hitstunAmt = Characters.hitstun(level, isCrouching(states[other]));
                 // cornercase: if already in hitstun, we need to add +1 frame because
                 // we decrement one too many times
                 if(states[other].hitstun > 0)
@@ -286,7 +288,7 @@ function processStateInteraction(frame, states, frames, characters) {
 
                 newStates[player].connected = true;
                 var blockstunAmt = Characters.blockstun(
-                    move.level, 
+                    level, 
                     isInstantBlocking(states[other]),
                     isFaultlessBlocking(states[other]));
                 // cornercase: if already blocking, we need to add +1 frame because
