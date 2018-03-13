@@ -1,6 +1,7 @@
 <template>
     <div class="sidebar-row"
         draggable="true"
+        @click="click"
         @dragstart="dragStart"
         @dragend="dragEnd"
         :class="{'sidebar-dark': index % 2 == 0, 'sidebar-light': !(index % 2 == 0), 'sidebar-selected': isSelected}">
@@ -33,23 +34,31 @@
                 if(!selectedMove)
                     return false;
                 return this.character == selectedMove.character
-                    && this.action == selectedMove.action
-                    && this.move == selectedMove.move
+                    && this.name === selectedMove.name
             }
         },
 
         methods: {
             dragStart: function(event) {
-                event.dataTransfer.setData("name", this.name);
                 this.$store.commit('selectMove', {
-                    move: this.move,
-                    action: this.action,
+                    name: this.name,
                     character: this.character
                 });
             },
 
             dragEnd: function(event) {
                 this.$store.commit('deselectMove');
+            },
+
+            click: function(event) {
+                if(this.isSelected) {
+                    this.$store.commit('deselectMove');
+                } else {
+                    this.$store.commit('selectMove', {
+                        name: this.name,
+                        character: this.character
+                    });
+                }
             }
         }
     }

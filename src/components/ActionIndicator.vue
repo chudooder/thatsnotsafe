@@ -1,7 +1,10 @@
 <template>
     <div
-        @click="removeAction"
+        draggable="true"
+        @click="click"
         @dragover.prevent
+        @dragstart="dragStart"
+        @dragend="dragEnd"
         @drop="drop"
         @mouseover="hovering = true"
         @mouseout="hovering = false"
@@ -25,7 +28,9 @@
             hovering: false,
         }},
 
-        computed: mapState(['selectedMove', 'characters']),
+        computed: {
+            ...mapState(['selectedMove', 'characters'])
+        },
 
         methods: {
             cleanup: function(str) {
@@ -71,15 +76,40 @@
                 }
             },
 
+            dragStart: function(event) {
+                this.removeAction();
+                this.$store.commit('selectMove', {
+                    name: this.action,
+                    character: this.characters[this.player]
+                });
+            },
+
+            dragEnd: function(event) {
+                this.$store.commit('deselectMove');
+            },
+
             drop: function(event) {
                 event.preventDefault();
                 if(this.canApply(this.selectedMove)) {
-                    var name = event.dataTransfer.getData("name");
                     this.$store.commit('addAction', {
                         player: this.player,
                         frame: this.frame,
-                        name: name
+                        name: this.selectedMove.name
                     });
+                }
+            },
+
+            click: function(event) {
+                event.preventDefault();
+                if(this.action) {
+                    this.removeAction();
+                } else if(this.canApply(this.selectedMove)) {
+                    this.$store.commit('addAction', {
+                        player: this.player,
+                        frame: this.frame,
+                        name: this.selectedMove.name
+                    });
+                    this.$store.commit('deselectMove');
                 }
             },
 

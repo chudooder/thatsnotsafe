@@ -2058,7 +2058,6 @@ var Characters = (() => {
     ];
 
     function hitstun(level, crouching) {
-        console.log(level);
         var column = crouching ? 1 : 0;
         return _stunTable[level][column];
     };
