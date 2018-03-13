@@ -2,10 +2,10 @@
     <transition name="column-slide">
         <div class="frame-col">
             <div class="frame-row">
-                <ActionIndicator
-                    :action="actions[0][frame-1]"
+                <CommandIndicator
+                    :cmdName="commands[0][frame-1]"
                     :player="0"
-                    :frame="frame-1"></ActionIndicator>
+                    :frame="frame-1"></CommandIndicator>
             </div>
             <div class="frame-row">
                 <FrameIndicator :top=true :frameData="frameData[0][frame - 1]"></FrameIndicator>
@@ -17,10 +17,10 @@
                 <FrameIndicator :top=false :frameData="frameData[1][frame - 1]"></FrameIndicator>
             </div>
             <div class="frame-row">
-                <ActionIndicator
-                    :action="actions[1][frame-1]"
+                <CommandIndicator
+                    :cmdName="commands[1][frame-1]"
                     :player="1"
-                    :frame="frame-1"></ActionIndicator>
+                    :frame="frame-1"></CommandIndicator>
             </div>
         </div>
     </transition>
@@ -29,16 +29,16 @@
 <script>
     import { mapState } from 'vuex';
     import FrameIndicator from './FrameIndicator.vue';
-    import ActionIndicator from './ActionIndicator.vue';
+    import CommandIndicator from './CommandIndicator.vue';
 
     export default {
-        components: { FrameIndicator, ActionIndicator },
+        components: { FrameIndicator, CommandIndicator },
 
         props: {
             frame: Number
         },
 
-        computed: mapState(['actions', 'characters', 'frameData'])
+        computed: mapState(['commands', 'characters', 'frameData'])
     }
 
 </script>

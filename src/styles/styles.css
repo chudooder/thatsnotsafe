@@ -84,6 +84,11 @@ body {
     color: #fff;
 }
 
+.sidebar-selected {
+    background-color: #fff !important;
+    color: #111 !important;
+}
+
 .sidebar-dark {
     background-color: #333;
 }
@@ -217,7 +222,7 @@ body {
     z-index: 100;
 }
 
-.action-indicator {
+.command-indicator {
     position: relative;
     left: 2px;
     top: 2px;

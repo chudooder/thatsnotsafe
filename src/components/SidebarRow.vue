@@ -1,9 +1,10 @@
 <template>
     <div class="sidebar-row"
         draggable="true"
+        @click="click"
         @dragstart="dragStart"
         @dragend="dragEnd"
-        :class="{'sidebar-dark': index % 2 == 0, 'sidebar-light': !(index % 2 == 0)}">
+        :class="{'sidebar-dark': index % 2 == 0, 'sidebar-light': !(index % 2 == 0), 'sidebar-selected': isSelected}">
         <template v-if="action">
             <span> {{ action.name }} </span>
         </template>
@@ -27,18 +28,37 @@
             "character": String
         },
 
+        computed: {
+            isSelected: function() {
+                var selectedCommand = this.$store.state.selectedCommand;
+                if(!selectedCommand)
+                    return false;
+                return this.character == selectedCommand.character
+                    && this.name === selectedCommand.name
+            }
+        },
+
         methods: {
             dragStart: function(event) {
-                event.dataTransfer.setData("name", this.name);
-                this.$store.commit('selectMove', {
-                    move: this.move,
-                    action: this.action,
+                this.$store.commit('selectCommand', {
+                    name: this.name,
                     character: this.character
                 });
             },
 
             dragEnd: function(event) {
-                this.$store.commit('deselectMove');
+                this.$store.commit('deselectCommand');
+            },
+
+            click: function(event) {
+                if(this.isSelected) {
+                    this.$store.commit('deselectCommand');
+                } else {
+                    this.$store.commit('selectCommand', {
+                        name: this.name,
+                        character: this.character
+                    });
+                }
             }
         }
     }
