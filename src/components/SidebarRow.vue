@@ -3,7 +3,7 @@
         draggable="true"
         @dragstart="dragStart"
         @dragend="dragEnd"
-        :class="{'sidebar-dark': index % 2 == 0, 'sidebar-light': !(index % 2 == 0)}">
+        :class="{'sidebar-dark': index % 2 == 0, 'sidebar-light': !(index % 2 == 0), 'sidebar-selected': isSelected}">
         <template v-if="action">
             <span> {{ action.name }} </span>
         </template>
@@ -25,6 +25,17 @@
             "name": String,
             "index": Number,
             "character": String
+        },
+
+        computed: {
+            isSelected: function() {
+                var selectedMove = this.$store.state.selectedMove;
+                if(!selectedMove)
+                    return false;
+                return this.character == selectedMove.character
+                    && this.action == selectedMove.action
+                    && this.move == selectedMove.move
+            }
         },
 
         methods: {

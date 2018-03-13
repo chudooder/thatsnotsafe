@@ -84,6 +84,11 @@ body {
     color: #fff;
 }
 
+.sidebar-selected {
+    background-color: #fff !important;
+    color: #111 !important;
+}
+
 .sidebar-dark {
     background-color: #333;
 }
