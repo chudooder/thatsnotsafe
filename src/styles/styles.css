@@ -222,7 +222,7 @@ body {
     z-index: 100;
 }
 
-.action-indicator {
+.command-indicator {
     position: relative;
     left: 2px;
     top: 2px;

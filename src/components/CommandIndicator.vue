@@ -9,8 +9,8 @@
         @mouseover="hovering = true"
         @mouseout="hovering = false"
         :style="styleObject()"
-        class="action-indicator">
-        {{ cleanup(action) }}
+        class="command-indicator">
+        {{ cleanup(cmdName) }}
     </div>
 </template>
 
@@ -19,7 +19,7 @@
 
     export default {
         props: {
-            action: String,
+            cmdName: String,
             player: Number,
             frame: Number,
         },
@@ -29,7 +29,7 @@
         }},
 
         computed: {
-            ...mapState(['selectedMove', 'characters'])
+            ...mapState(['selectedCommand', 'characters'])
         },
 
         methods: {
@@ -58,7 +58,7 @@
             },
 
             backgroundColor: function() {
-                if(!this.action) {
+                if(!this.cmdName) {
                     return "#fff0";
                 } else {
                     if(this.hovering)
@@ -69,7 +69,7 @@
             },
 
             borderColor: function() {
-                if(this.selectedMove && this.canApply(this.selectedMove)) {
+                if(this.selectedCommand && this.canApply(this.selectedCommand)) {
                     return '#aaa';
                 } else {
                     return '#0000';
@@ -78,38 +78,38 @@
 
             dragStart: function(event) {
                 this.removeAction();
-                this.$store.commit('selectMove', {
-                    name: this.action,
+                this.$store.commit('selectCommand', {
+                    name: this.cmdName,
                     character: this.characters[this.player]
                 });
             },
 
             dragEnd: function(event) {
-                this.$store.commit('deselectMove');
+                this.$store.commit('deselectCommand');
             },
 
             drop: function(event) {
                 event.preventDefault();
-                if(this.canApply(this.selectedMove)) {
+                if(this.canApply(this.selectedCommand)) {
                     this.$store.commit('addAction', {
                         player: this.player,
                         frame: this.frame,
-                        name: this.selectedMove.name
+                        name: this.selectedCommand.name
                     });
                 }
             },
 
             click: function(event) {
                 event.preventDefault();
-                if(this.action) {
+                if(this.cmdName) {
                     this.removeAction();
-                } else if(this.canApply(this.selectedMove)) {
+                } else if(this.canApply(this.selectedCommand)) {
                     this.$store.commit('addAction', {
                         player: this.player,
                         frame: this.frame,
-                        name: this.selectedMove.name
+                        name: this.selectedCommand.name
                     });
-                    this.$store.commit('deselectMove');
+                    this.$store.commit('deselectCommand');
                 }
             },
 

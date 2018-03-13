@@ -25,38 +25,38 @@ var trimActions = function(arr) {
 const store = new Vuex.Store({
     state: {
         characters: ["Elphelt", "Elphelt"],
-        actions: [["5K"], ["_SB"]],
+        commands: [["5K"], ["_SB"]],
         frameData: [[],[]],
-        selectedMove: null
+        selectedCommand: null
     },
 
     mutations: {
         calculateFrameData: function(state) {
-            state.frameData = Rules.calculateFrames(state.characters, state.actions);
+            state.frameData = Rules.calculateFrames(state.characters, state.commands);
         },
 
         removeAction: function(state, payload) {
-            state.actions[payload.player][payload.frame] = null;
-            trimActions(state.actions);
-            state.frameData = Rules.calculateFrames(state.characters, state.actions);
+            state.commands[payload.player][payload.frame] = null;
+            trimActions(state.commands);
+            state.frameData = Rules.calculateFrames(state.characters, state.commands);
         },
 
         addAction: function(state, payload) {
-            // pad out actions array
-            for(var i = state.actions[payload.player].length; i < payload.frame; i++) {
-                state.actions[payload.player][i] = null;
+            // pad out commands array
+            for(var i = state.commands[payload.player].length; i < payload.frame; i++) {
+                state.commands[payload.player][i] = null;
             }
-            state.actions[payload.player][payload.frame] = payload.name;
-            trimActions(state.actions);
-            state.frameData = Rules.calculateFrames(state.characters, state.actions);
+            state.commands[payload.player][payload.frame] = payload.name;
+            trimActions(state.commands);
+            state.frameData = Rules.calculateFrames(state.characters, state.commands);
         },
 
-        selectMove: function(state, payload) {
-            state.selectedMove = payload;
+        selectCommand: function(state, payload) {
+            state.selectedCommand = payload;
         },
 
-        deselectMove: function(state) {
-            state.selectedMove = null;
+        deselectCommand: function(state) {
+            state.selectedCommand = null;
         },
 
         setCharacter: function(state, payload) {

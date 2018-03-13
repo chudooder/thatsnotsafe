@@ -142,60 +142,60 @@ function blocksMove(state, move) {
         || isCrouching(state) && !move.guard.startsWith('High'));
 }
 
-function processInitialStateChangingActions(frame, actions, states, characters) {
+function processInitialStateChangingCommands(frame, commands, states, characters) {
     for(var player = 0; player <= 1; player++) {    
-        var action = actions[player][frame];
+        var command = commands[player][frame];
 
-        // no action to be found
-        if(!action) {
+        // no command to be found
+        if(!command) {
             continue;
 
         // crouch
-        } else if(action == "_C" && canAct(states[player])) {
+        } else if(command == "_C" && canAct(states[player])) {
             states[player].type = PlayerState.CROUCHING;
 
         // crouch
-        } else if(action == "_S" && canAct(states[player])) {
+        } else if(command == "_S" && canAct(states[player])) {
             states[player].type = PlayerState.NEUTRAL;
 
         // crouching block
-        } else if(action == "_CB" && canAct(states[player])) {
+        } else if(command == "_CB" && canAct(states[player])) {
             states[player].type = PlayerState.CROUCH_BLOCKING;
             states[player].blockstun = 0;
 
         // standing block
-        } else if(action == "_SB" && canAct(states[player])) {
+        } else if(command == "_SB" && canAct(states[player])) {
             states[player].type = PlayerState.BLOCKING;
             states[player].blockstun = 0;
 
         // instant block
-        } else if(action == "_IB" && canAct(states[player])) {
+        } else if(command == "_IB" && canAct(states[player])) {
             states[player].type = PlayerState.INSTANT_BLOCKING;
             states[player].blockstun = 0;
 
         // crouch instant block
-        } else if(action == "_CIB" && canAct(states[player])) {
+        } else if(command == "_CIB" && canAct(states[player])) {
             states[player].type = PlayerState.CROUCH_INSTANT_BLOCKING;
             states[player].blockstun = 0;
 
         // standing faultless defense
-        } else if(action == "_FD" && canAct(states[player])) {
+        } else if(command == "_FD" && canAct(states[player])) {
             states[player].type = PlayerState.FAULTLESS_DEFENSE;
             states[player].blockstun = 0;
 
         // crouching faultless defense
-        } else if(action == "_CFD" && canAct(states[player])) {
+        } else if(command == "_CFD" && canAct(states[player])) {
             states[player].type = PlayerState.CROUCH_FAULTLESS_DEFENSE;
             states[player].blockstun = 0;
 
         // jump
-        } else if(action == "_J" && canJump(frame, states[player])) {
+        } else if(command == "_J" && canJump(frame, states[player])) {
             states[player].type = PlayerState.JUMPSQUAT;
             states[player].jumpsquat = Characters.data[characters[player]].jumpStartup;
 
-        // all other actions treated as attacks
-        } else if(!action.startsWith("_")) {
-            var newMove = Characters.data[characters[player]].moves[action];
+        // all other commands treated as attacks
+        } else if(!command.startsWith("_")) {
+            var newMove = Characters.data[characters[player]].moves[command];
             if(canAttack(frame, states[player], newMove)) {
                 states[player].type = PlayerState.ATTACKING;
                 states[player].startFrame = frame;
@@ -341,19 +341,19 @@ function processStateInteraction(frame, states, frames, characters) {
     states[1] = newStates[1];
 }
 
-// These are for special case actions that should take place at the end of a frame.
-// For example, the _L (land) action is processed here so that users can input
+// These are for special case commands that should take place at the end of a frame.
+// For example, the _L (land) command is processed here so that users can input
 // moves on the first available neutral frame after landing.
-function processFinalStateChangingActions(frame, actions, states, characters) {
+function processFinalStateChangingCommands(frame, commands, states, characters) {
     for(var player = 0; player <= 1; player++) {
-        var action = actions[player][frame];
+        var command = commands[player][frame];
 
-        // no action to be found
-        if(!action) {
+        // no command to be found
+        if(!command) {
             continue;
 
         // land
-        } else if(action == "_L" && states[player].airborne) {
+        } else if(command == "_L" && states[player].airborne) {
             if(states[player].type == PlayerState.ATTACKING && states[player].move.recovery_after_landing) {
                 states[player].type = PlayerState.LANDING_RECOVERY;
                 states[player].landingRecovery = states[player].move.recovery_after_landing;
@@ -367,7 +367,7 @@ function processFinalStateChangingActions(frame, actions, states, characters) {
 
 // returns the calculated states for each frame for both characters
 // as two arrays.
-function calculateFrames(characters, actions) {
+function calculateFrames(characters, commands) {
     var states = [
         {type: PlayerState.NEUTRAL, airborne: false}, 
         {type: PlayerState.NEUTRAL, airborne: false}];
@@ -377,7 +377,7 @@ function calculateFrames(characters, actions) {
 
     while(!done) {
         // change states
-        processInitialStateChangingActions(curFrame, actions, states, characters);
+        processInitialStateChangingCommands(curFrame, commands, states, characters);
 
         // write frame types
         processFrameType(curFrame, states, frames);
@@ -387,13 +387,13 @@ function calculateFrames(characters, actions) {
         // resolve states
         processStateInteraction(curFrame, states, frames, characters);
 
-        // final state changing actions
-        processFinalStateChangingActions(curFrame, actions, states, characters);
+        // final state changing commands
+        processFinalStateChangingCommands(curFrame, commands, states, characters);
 
 
-        // finish if both players in neutral and no more actions
-        if(actions[0][curFrame] === undefined 
-            && actions[1][curFrame] === undefined
+        // finish if both players in neutral and no more commands
+        if(commands[0][curFrame] === undefined 
+            && commands[1][curFrame] === undefined
             && canAct(states[0])
             && canAct(states[1])) {
 

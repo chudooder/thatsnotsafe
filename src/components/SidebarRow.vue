@@ -30,31 +30,31 @@
 
         computed: {
             isSelected: function() {
-                var selectedMove = this.$store.state.selectedMove;
-                if(!selectedMove)
+                var selectedCommand = this.$store.state.selectedCommand;
+                if(!selectedCommand)
                     return false;
-                return this.character == selectedMove.character
-                    && this.name === selectedMove.name
+                return this.character == selectedCommand.character
+                    && this.name === selectedCommand.name
             }
         },
 
         methods: {
             dragStart: function(event) {
-                this.$store.commit('selectMove', {
+                this.$store.commit('selectCommand', {
                     name: this.name,
                     character: this.character
                 });
             },
 
             dragEnd: function(event) {
-                this.$store.commit('deselectMove');
+                this.$store.commit('deselectCommand');
             },
 
             click: function(event) {
                 if(this.isSelected) {
-                    this.$store.commit('deselectMove');
+                    this.$store.commit('deselectCommand');
                 } else {
-                    this.$store.commit('selectMove', {
+                    this.$store.commit('selectCommand', {
                         name: this.name,
                         character: this.character
                     });
