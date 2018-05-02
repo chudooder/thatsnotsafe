@@ -119,6 +119,15 @@ function runTests() {
             ]), toTypeArray(res[1]));
     });
 
+    test("keep-stance-after-hit", () => {
+        var res = Rules.calculateFrames(["Elphelt", "Elphelt"], [["5P", null, null, null, null, "f.S"], ["_C"]]);
+        assertArrays(expand([
+                [FrameType.NEUTRAL, 5],
+                [FrameType.HITSTUN, 27],
+                [FrameType.NEUTRAL, 3]
+            ]), toTypeArray(res[1]));
+    });
+
     test("basic-blockstun", () => {
         var res = Rules.calculateFrames(["Elphelt", "Elphelt"], [["5P"], ["_SB"]]);
         assertArrays(expand([

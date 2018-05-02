@@ -4,13 +4,9 @@ import Characters from './characters.js';
 
 var PlayerState = {
     NEUTRAL: 0,
-    CROUCHING: 1,
     BLOCKING: 2,
-    CROUCH_BLOCKING: 3,
-    INSTANT_BLOCKING: 4,
-    CROUCH_INSTANT_BLOCKING: 5,
-    FAULTLESS_DEFENSE: 6,
-    CROUCH_FAULTLESS_DEFENSE: 7,
+    INSTANT_BLOCKING: 3,
+    FAULTLESS_DEFENSE: 4,
     ATTACKING: 8,
     HITSTUN: 9,
     JUMPSQUAT: 10,
@@ -27,6 +23,11 @@ var FrameType = {
     BLOCKSTUN: 6,
     JUMPSQUAT: 7,
     LANDING_RECOVERY: 8
+}
+
+var Stance = {
+    STANDING: 0,
+    CROUCHING: 1
 }
 
 function arrSum(arr) {
@@ -75,7 +76,6 @@ function startOfHitbox(move, duration) {
 
 function canAct(state) {
     return state.type === PlayerState.NEUTRAL
-        || state.type === PlayerState.CROUCHING
         || (isBlocking(state) && state.blockstun === 0);
 }
 
@@ -114,27 +114,20 @@ function canJump(frame, state) {
 
 function isBlocking(state) {
     return state.type === PlayerState.BLOCKING
-        || state.type === PlayerState.CROUCH_BLOCKING
         || state.type === PlayerState.INSTANT_BLOCKING
-        || state.type === PlayerState.CROUCH_INSTANT_BLOCKING
         || state.type === PlayerState.FAULTLESS_DEFENSE
-        || state.type === PlayerState.CROUCH_FAULTLESS_DEFENSE;
 }
 
 function isInstantBlocking(state) {
-    return state.type === PlayerState.INSTANT_BLOCKING
-        || state.type === PlayerState.CROUCH_INSTANT_BLOCKING;
+    return state.type === PlayerState.INSTANT_BLOCKING;
 }
 
 function isFaultlessBlocking(state) {
-    return state.type === PlayerState.FAULTLESS_DEFENSE
-        || state.type === PlayerState.CROUCH_FAULTLESS_DEFENSE;
+    return state.type === PlayerState.FAULTLESS_DEFENSE;
 }
 
 function isCrouching(state) {
-    return state.type === PlayerState.CROUCHING
-        || state.type === PlayerState.CROUCH_BLOCKING
-        || state.type === PlayerState.CROUCH_INSTANT_BLOCKING;
+    return state.stance === Stance.CROUCHING;
 }
 
 function blocksMove(state, move) {
@@ -152,40 +145,48 @@ function processInitialStateChangingCommands(frame, commands, states, characters
 
         // crouch
         } else if(command == "_C" && canAct(states[player])) {
-            states[player].type = PlayerState.CROUCHING;
+            states[player].stance = Stance.CROUCHING;
+            states[player].type = PlayerState.NEUTRAL;
 
         // crouch
         } else if(command == "_S" && canAct(states[player])) {
+            states[player].stance = Stance.STANDING;
             states[player].type = PlayerState.NEUTRAL;
 
         // crouching block
         } else if(command == "_CB" && canAct(states[player])) {
-            states[player].type = PlayerState.CROUCH_BLOCKING;
+            states[player].stance = Stance.CROUCHING;
+            states[player].type = PlayerState.BLOCKING;
             states[player].blockstun = 0;
 
         // standing block
         } else if(command == "_SB" && canAct(states[player])) {
+            states[player].stance = Stance.STANDING;
             states[player].type = PlayerState.BLOCKING;
             states[player].blockstun = 0;
 
         // instant block
         } else if(command == "_IB" && canAct(states[player])) {
+            states[player].stance = Stance.STANDING;
             states[player].type = PlayerState.INSTANT_BLOCKING;
             states[player].blockstun = 0;
 
         // crouch instant block
         } else if(command == "_CIB" && canAct(states[player])) {
-            states[player].type = PlayerState.CROUCH_INSTANT_BLOCKING;
+            states[player].stance = Stance.CROUCHING;
+            states[player].type = PlayerState.INSTANT_BLOCKING;
             states[player].blockstun = 0;
 
         // standing faultless defense
         } else if(command == "_FD" && canAct(states[player])) {
+            states[player].stance = Stance.STANDING;
             states[player].type = PlayerState.FAULTLESS_DEFENSE;
             states[player].blockstun = 0;
 
         // crouching faultless defense
         } else if(command == "_CFD" && canAct(states[player])) {
-            states[player].type = PlayerState.CROUCH_FAULTLESS_DEFENSE;
+            states[player].stance = Stance.CROUCHING;
+            states[player].type = PlayerState.FAULTLESS_DEFENSE;
             states[player].blockstun = 0;
 
         // jump
