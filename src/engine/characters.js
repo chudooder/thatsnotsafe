@@ -2037,13 +2037,10 @@ var Characters = (() => {
 
     var universalActions = {
         "_S": { "name": "Stand" },
-        "_SB": { "name": "Standing Block" },
-        "_IB": { "name": "Standing Instant Block" },
-        "_FD": { "name": "Standing Faultless Defense" },
+        "_B": { "name": "Block" },
+        "_IB": { "name": "Instant Block" },
+        "_FD": { "name": "Faultless Defense" },
         "_C": { "name": "Crouch" },
-        "_CB": { "name": "Crouch Block" },
-        "_CIB": { "name": "Crouch Instant Block" },
-        "_CFD": { "name": "Crouch Faultless Defense" },
         "_J": { "name": "Jump" },
         "_L": { "name": "Land" }
     }

@@ -1,37 +1,39 @@
 <template>
     <div>
-        <Sidebar :characters="characters"/>
+        <!-- <PageHeader/> -->
+        <div id="main-container">
+            <Sidebar :characters="characters"/>
+            <div class="timeline">
+                <!-- Timeline header -->
 
-        <div class="timeline">
-            <!-- Timeline header -->
+                <div class="header-col">
+                    <div class="header-row"></div>
+                    <div class="header-row">
+                        <div class="select-char">
+                            <!-- totally violates Vuex mutations but oh well -->
+                            <select v-model="characters[0]">
+                                <option v-for="char in getCharacterList()">{{char}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="header-divider">
+                    </div>
+                    <div class="header-row">
+                        <div class="select-char">
+                            <select v-model="characters[1]">
+                                <option v-for="char in getCharacterList()">{{char}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="header-row"></div>
+                </div>
 
-            <div class="header-col">
-                <div class="header-row"></div>
-                <div class="header-row">
-                    <div class="select-char">
-                        <!-- totally violates Vuex mutations but oh well -->
-                        <select v-model="characters[0]">
-                            <option v-for="char in getCharacterList()">{{char}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="header-divider">
-                </div>
-                <div class="header-row">
-                    <div class="select-char">
-                        <select v-model="characters[1]">
-                            <option v-for="char in getCharacterList()">{{char}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="header-row"></div>
+                <!-- Timeline elements -->
+                <FrameColumn
+                    v-for="frame in frameData[0].length"
+                    :key="frame"
+                    :frame="frame"></FrameColumn>
             </div>
-
-            <!-- Timeline elements -->
-            <FrameColumn
-                v-for="frame in frameData[0].length"
-                :key="frame"
-                :frame="frame"></FrameColumn>
         </div>
     </div>
 </template>
@@ -39,12 +41,13 @@
 <script>
     import { mapState } from 'vuex';
     import FrameColumn from './FrameColumn.vue';
+    import PageHeader from './PageHeader.vue';
     import Sidebar from './Sidebar.vue';
     import Characters from '../engine/characters.js';
     import Rules from '../engine/rules.js';
 
     export default {
-        components: { FrameColumn, Sidebar },
+        components: { FrameColumn, PageHeader, Sidebar },
 
         data: function() { 
             return {

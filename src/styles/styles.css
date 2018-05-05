@@ -41,6 +41,13 @@ body {
     cursor: default;
 }
 
+/* header */
+.page-header {
+    width: 100%;
+    height: 46px;
+    background-color: #eee;
+}
+
 /* sidebar */
 
 .sidebar {

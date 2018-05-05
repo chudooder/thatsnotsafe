@@ -131,8 +131,11 @@ function isCrouching(state) {
 }
 
 function blocksMove(state, move) {
-    return isBlocking(state) && (!isCrouching(state) && move.guard != "Low"
-        || isCrouching(state) && !move.guard.startsWith('High'));
+    return isBlocking(state) && 
+        (!isCrouching(state) && move.guard != "Low"                             // high blocks high moves
+        || isCrouching(state) && !move.guard.includes('High')                   // low blocks low moves
+        || isFaultlessBlocking(state) && state.airborne                         // air FD blocks any move
+        || isBlocking(state) && state.airborne && move.guard.includes('Air'));  // air blocks air moves
 }
 
 function processInitialStateChangingCommands(frame, commands, states, characters) {
@@ -143,34 +146,37 @@ function processInitialStateChangingCommands(frame, commands, states, characters
         if(!command) {
             continue;
 
-        // crouch
+        // crouch (stance change only)
         } else if(command == "_C" && canAct(states[player])) {
             states[player].stance = Stance.CROUCHING;
-            states[player].type = PlayerState.NEUTRAL;
-
-        // crouch
+        // stand (stance change only)
         } else if(command == "_S" && canAct(states[player])) {
             states[player].stance = Stance.STANDING;
-            states[player].type = PlayerState.NEUTRAL;
-
-        // crouching block
+        
+        // block
+        } else if(command == "_B" && canAct(states[player])) {
+            states[player].type = PlayerState.BLOCKING;
+            states[player].blockstun = 0;
+        // block
+        } else if(command == "_SB" && canAct(states[player])) {
+            states[player].stance = Stance.STANDING;
+            states[player].type = PlayerState.BLOCKING;
+            states[player].blockstun = 0;
+        // block
         } else if(command == "_CB" && canAct(states[player])) {
             states[player].stance = Stance.CROUCHING;
             states[player].type = PlayerState.BLOCKING;
             states[player].blockstun = 0;
 
-        // standing block
-        } else if(command == "_SB" && canAct(states[player])) {
-            states[player].stance = Stance.STANDING;
-            states[player].type = PlayerState.BLOCKING;
-            states[player].blockstun = 0;
-
         // instant block
         } else if(command == "_IB" && canAct(states[player])) {
+            states[player].type = PlayerState.INSTANT_BLOCKING;
+            states[player].blockstun = 0;
+        // stand instant block
+        } else if(command == "_SIB" && canAct(states[player])) {
             states[player].stance = Stance.STANDING;
             states[player].type = PlayerState.INSTANT_BLOCKING;
             states[player].blockstun = 0;
-
         // crouch instant block
         } else if(command == "_CIB" && canAct(states[player])) {
             states[player].stance = Stance.CROUCHING;
@@ -179,11 +185,14 @@ function processInitialStateChangingCommands(frame, commands, states, characters
 
         // standing faultless defense
         } else if(command == "_FD" && canAct(states[player])) {
+            states[player].type = PlayerState.FAULTLESS_DEFENSE;
+            states[player].blockstun = 0;
+        // standing faultless defense
+        } else if(command == "_SFD" && canAct(states[player])) {
             states[player].stance = Stance.STANDING;
             states[player].type = PlayerState.FAULTLESS_DEFENSE;
             states[player].blockstun = 0;
-
-        // crouching faultless defense
+        // standing faultless defense
         } else if(command == "_CFD" && canAct(states[player])) {
             states[player].stance = Stance.CROUCHING;
             states[player].type = PlayerState.FAULTLESS_DEFENSE;
@@ -264,7 +273,7 @@ function processStateInteraction(frame, states, frames, characters) {
             var level = move.level[Characters.hitboxIndex(move, duration)];
             var frameType = getAttackFrameType(move, duration);
 
-            // if we have active frames and they aren't blocking,
+            // if we have active frames, they aren't blocking correctly,
             // and we haven't hit them with the move, put them in hitstun
             if(frameType == FrameType.ATTACK_ACTIVE 
                 && (!isBlocking(states[other]) || !blocksMove(states[other], move))
