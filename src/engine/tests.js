@@ -137,7 +137,7 @@ function runTests() {
                 [FrameType.NEUTRAL, 3]
             ]), toTypeArray(res[0]));
         assertArrays(expand([
-                [FrameType.NEUTRAL, 5],
+                [FrameType.BLOCKING, 5],
                 [FrameType.BLOCKSTUN, 9],
                 [FrameType.NEUTRAL, 1]
             ]), toTypeArray(res[1]));
@@ -152,7 +152,7 @@ function runTests() {
                 [FrameType.NEUTRAL, 1]
             ]), toTypeArray(res[0]));
         assertArrays(expand([
-                [FrameType.NEUTRAL, 5],
+                [FrameType.BLOCKING, 5],
                 [FrameType.BLOCKSTUN, 7],
                 [FrameType.NEUTRAL, 1]
             ]), toTypeArray(res[1]));
@@ -167,7 +167,7 @@ function runTests() {
                 [FrameType.NEUTRAL, 1]
             ]), toTypeArray(res[0]));
         assertArrays(expand([
-                [FrameType.NEUTRAL, 5],
+                [FrameType.BLOCKING, 5],
                 [FrameType.BLOCKSTUN, 7],
                 [FrameType.NEUTRAL, 1]
             ]), toTypeArray(res[1]));
@@ -182,7 +182,7 @@ function runTests() {
                 [FrameType.NEUTRAL, 5]
             ]), toTypeArray(res[0]));
         assertArrays(expand([
-                [FrameType.NEUTRAL, 5],
+                [FrameType.BLOCKING, 5],
                 [FrameType.BLOCKSTUN, 11],
                 [FrameType.NEUTRAL, 1]
             ]), toTypeArray(res[1]));
@@ -197,7 +197,7 @@ function runTests() {
                 [FrameType.NEUTRAL, 5]
             ]), toTypeArray(res[0]));
         assertArrays(expand([
-                [FrameType.NEUTRAL, 5],
+                [FrameType.BLOCKING, 5],
                 [FrameType.BLOCKSTUN, 11],
                 [FrameType.NEUTRAL, 1]
             ]), toTypeArray(res[1]));
@@ -293,7 +293,7 @@ function runTests() {
                 [FrameType.NEUTRAL, 1]
             ]), toTypeArray(res[0]));
         assertArrays(expand([
-                [FrameType.NEUTRAL, 5],
+                [FrameType.BLOCKING, 5],
                 [FrameType.HITSTUN, 10],
                 [FrameType.NEUTRAL, 1]
             ]), toTypeArray(res[1]));
@@ -308,7 +308,7 @@ function runTests() {
                 [FrameType.NEUTRAL, 1]
             ]), toTypeArray(res[0]));
         assertArrays(expand([
-                [FrameType.NEUTRAL, 24],
+                [FrameType.BLOCKING, 24],
                 [FrameType.HITSTUN, 15],
                 [FrameType.NEUTRAL, 7]
             ]), toTypeArray(res[1]));
@@ -323,7 +323,7 @@ function runTests() {
                 [FrameType.NEUTRAL, 1]
             ]), toTypeArray(res[0]));
         assertArrays(expand([
-                [FrameType.NEUTRAL, 5],
+                [FrameType.BLOCKING, 5],
                 [FrameType.HITSTUN, 10],
                 [FrameType.NEUTRAL, 1]
             ]), toTypeArray(res[1]));
@@ -338,7 +338,7 @@ function runTests() {
                 [FrameType.NEUTRAL, 1]
             ]), toTypeArray(res[0]));
         assertArrays(expand([
-                [FrameType.NEUTRAL, 24],
+                [FrameType.BLOCKING, 24],
                 [FrameType.HITSTUN, 15],
                 [FrameType.NEUTRAL, 7]
             ]), toTypeArray(res[1]));
@@ -380,7 +380,7 @@ function runTests() {
             ]), toTypeArray(res[0]));
         assertArrays(expand([
                 [FrameType.JUMPSQUAT, 3],
-                [FrameType.NEUTRAL, 6],
+                [FrameType.BLOCKING, 6],
                 [FrameType.BLOCKSTUN, 9],
                 [FrameType.NEUTRAL, 6],
             ]), toTypeArray(res[1]));
@@ -397,7 +397,7 @@ function runTests() {
             ]), toTypeArray(res[0]));
         assertArrays(expand([
                 [FrameType.JUMPSQUAT, 3],
-                [FrameType.NEUTRAL, 6],
+                [FrameType.BLOCKING, 6],
                 [FrameType.BLOCKSTUN, 3],
                 [FrameType.NEUTRAL, 12],
             ]), toTypeArray(res[1]));
@@ -414,7 +414,7 @@ function runTests() {
             ]), toTypeArray(res[0]));
         assertArrays(expand([
                 [FrameType.JUMPSQUAT, 3],
-                [FrameType.NEUTRAL, 6],
+                [FrameType.BLOCKING, 6],
                 [FrameType.BLOCKSTUN, 11],
                 [FrameType.NEUTRAL, 4],
             ]), toTypeArray(res[1]));
@@ -429,7 +429,7 @@ function runTests() {
             ]), toTypeArray(res[0]));
         assertArraysWeak(expand([
                 [FrameType.JUMPSQUAT, 3],
-                [FrameType.NEUTRAL, 2],
+                [FrameType.BLOCKING, 2],
                 [FrameType.HITSTUN, 10],
             ]), toTypeArray(res[1]));
     });
@@ -443,7 +443,7 @@ function runTests() {
             ]), toTypeArray(res[0]));
         assertArraysWeak(expand([
                 [FrameType.JUMPSQUAT, 3],
-                [FrameType.NEUTRAL, 2],
+                [FrameType.BLOCKING, 2],
                 [FrameType.HITSTUN, 10],
             ]), toTypeArray(res[1]));
     });
@@ -457,7 +457,7 @@ function runTests() {
             ]), toTypeArray(res[0]));
         assertArraysWeak(expand([
                 [FrameType.JUMPSQUAT, 3],
-                [FrameType.NEUTRAL, 2],
+                [FrameType.BLOCKING, 2],
                 [FrameType.BLOCKSTUN, 11],
             ]), toTypeArray(res[1]));
     });

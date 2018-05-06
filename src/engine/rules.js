@@ -15,14 +15,15 @@ var PlayerState = {
 
 var FrameType = {
     NEUTRAL: 0,
-    ATTACK_STARTUP: 1,
-    ATTACK_ACTIVE: 2,
-    ATTACK_ACTIVE_NO_HITBOX: 3,
-    ATTACK_RECOVERY: 4,
-    HITSTUN: 5,
-    BLOCKSTUN: 6,
-    JUMPSQUAT: 7,
-    LANDING_RECOVERY: 8
+    BLOCKING: 1,
+    ATTACK_STARTUP: 2,
+    ATTACK_ACTIVE: 3,
+    ATTACK_ACTIVE_NO_HITBOX: 4,
+    ATTACK_RECOVERY: 5,
+    HITSTUN: 6,
+    BLOCKSTUN: 7,
+    JUMPSQUAT: 8,
+    LANDING_RECOVERY: 9,
 }
 
 var Stance = {
@@ -243,6 +244,10 @@ function processFrameType(frame, states, frames) {
         else if(states[player].type == PlayerState.HITSTUN) {
             frameType.type = FrameType.HITSTUN;
             frameType.stun = states[player].hitstun;
+        }
+
+        else if(isBlocking(states[player]) && states[player].blockstun == 0) {
+            frameType.type = FrameType.BLOCKING;
         }
 
         else if(isBlocking(states[player]) && states[player].blockstun > 0) {

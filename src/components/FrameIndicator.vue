@@ -29,6 +29,8 @@
                 switch(frameType) {
                     case Rules.FrameType.NEUTRAL:
                         return "#ffffff";
+                    case Rules.FrameType.BLOCKING:
+                        return "#ccccff";
                     case Rules.FrameType.ATTACK_STARTUP:
                         return "#ffd70f"
                     case Rules.FrameType.ATTACK_ACTIVE:
@@ -52,6 +54,8 @@
                 switch(frameData.type) {
                     case Rules.FrameType.NEUTRAL:
                         return "Neutral";
+                    case Rules.FrameType.BLOCKING:
+                        return "Blocking";
                     case Rules.FrameType.ATTACK_STARTUP:
                         return "Startup"
                     case Rules.FrameType.ATTACK_ACTIVE:
