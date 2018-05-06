@@ -130,12 +130,16 @@ function isCrouching(state) {
     return state.stance === Stance.CROUCHING;
 }
 
+function isAirborne(state) {
+    return state.airborne;
+}
+
 function blocksMove(state, move) {
     return isBlocking(state) && 
-        (!isCrouching(state) && move.guard != "Low"                             // high blocks high moves
-        || isCrouching(state) && !move.guard.includes('High')                   // low blocks low moves
-        || isFaultlessBlocking(state) && state.airborne                         // air FD blocks any move
-        || isBlocking(state) && state.airborne && move.guard.includes('Air'));  // air blocks air moves
+        (!isAirborne(state) && !isCrouching(state) && move.guard != "Low"              // high blocks high moves
+        || !isAirborne(state) && isCrouching(state) && !move.guard.includes('High')    // low blocks low moves
+        || isAirborne(state) && isFaultlessBlocking(state)                             // air FD blocks any move
+        || isAirborne(state) && isBlocking(state) && move.guard.includes('Air'));      // air blocks air moves
 }
 
 function processInitialStateChangingCommands(frame, commands, states, characters) {
@@ -219,7 +223,14 @@ function processInitialStateChangingCommands(frame, commands, states, characters
 function processFrameType(frame, states, frames) {
     for(var player = 0; player <= 1; player++) {
         var other = 1 - player;
-        var frameType = {type: FrameType.NEUTRAL};
+        var frameType = {
+            type: FrameType.NEUTRAL,
+            airborne: false
+        };
+
+        if(states[player].airborne) {
+            frameType.airborne = true;
+        }
 
         // for attacking frames
         if(states[player].type == PlayerState.ATTACKING) {
@@ -280,9 +291,12 @@ function processStateInteraction(frame, states, frames, characters) {
                 && !states[player].connected) {
 
                 newStates[player].connected = true;
-                var hitstunAmt = Characters.hitstun(level, isCrouching(states[other]));
+                var hitstunAmt = Characters.hitstun(
+                    level,
+                    isCrouching(states[other]),
+                    isAirborne(states[other]));
                 // cornercase: if already in hitstun, we need to add +1 frame because
-                // we decrement one too many times
+                // we decrement one too many times later.
                 if(states[other].hitstun > 0)
                     hitstunAmt++;
 
@@ -293,14 +307,15 @@ function processStateInteraction(frame, states, frames, characters) {
             // if we have active frames and they are blocking,
             // put them in blockstun
             else if(frameType == FrameType.ATTACK_ACTIVE
-                && isBlocking(states[other], move)
+                && blocksMove(states[other], move)
                 && !states[player].connected) {
 
                 newStates[player].connected = true;
                 var blockstunAmt = Characters.blockstun(
                     level, 
                     isInstantBlocking(states[other]),
-                    isFaultlessBlocking(states[other]));
+                    isFaultlessBlocking(states[other]),
+                    isAirborne(states[other]));
                 // cornercase: if already blocking, we need to add +1 frame because
                 // we decrement one too many times
                 if(states[other].blockstun > 0)

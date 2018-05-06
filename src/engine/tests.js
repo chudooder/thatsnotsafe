@@ -369,6 +369,100 @@ function runTests() {
             ]), toTypeArray(res[0]));
     });
 
+    test("air-attack-air-normal-block", () => {
+        var res = Rules.calculateFrames(["Elphelt", "Elphelt"], [["_J", null, null, "j.P"], ["_J", null, null, "_B"]]);
+        assertArrays(expand([
+                [FrameType.JUMPSQUAT, 3],
+                [FrameType.ATTACK_STARTUP, 5],
+                [FrameType.ATTACK_ACTIVE, 6],
+                [FrameType.ATTACK_RECOVERY, 9],
+                [FrameType.NEUTRAL, 1]
+            ]), toTypeArray(res[0]));
+        assertArrays(expand([
+                [FrameType.JUMPSQUAT, 3],
+                [FrameType.NEUTRAL, 6],
+                [FrameType.BLOCKSTUN, 9],
+                [FrameType.NEUTRAL, 6],
+            ]), toTypeArray(res[1]));
+    });
+
+    test("air-attack-air-instant-block", () => {
+        var res = Rules.calculateFrames(["Elphelt", "Elphelt"], [["_J", null, null, "j.P"], ["_J", null, null, "_IB"]]);
+        assertArrays(expand([
+                [FrameType.JUMPSQUAT, 3],
+                [FrameType.ATTACK_STARTUP, 5],
+                [FrameType.ATTACK_ACTIVE, 6],
+                [FrameType.ATTACK_RECOVERY, 9],
+                [FrameType.NEUTRAL, 1]
+            ]), toTypeArray(res[0]));
+        assertArrays(expand([
+                [FrameType.JUMPSQUAT, 3],
+                [FrameType.NEUTRAL, 6],
+                [FrameType.BLOCKSTUN, 3],
+                [FrameType.NEUTRAL, 12],
+            ]), toTypeArray(res[1]));
+    });
+
+    test("air-attack-air-fautless-defense", () => {
+        var res = Rules.calculateFrames(["Elphelt", "Elphelt"], [["_J", null, null, "j.P"], ["_J", null, null, "_FD"]]);
+        assertArrays(expand([
+                [FrameType.JUMPSQUAT, 3],
+                [FrameType.ATTACK_STARTUP, 5],
+                [FrameType.ATTACK_ACTIVE, 6],
+                [FrameType.ATTACK_RECOVERY, 9],
+                [FrameType.NEUTRAL, 1]
+            ]), toTypeArray(res[0]));
+        assertArrays(expand([
+                [FrameType.JUMPSQUAT, 3],
+                [FrameType.NEUTRAL, 6],
+                [FrameType.BLOCKSTUN, 11],
+                [FrameType.NEUTRAL, 4],
+            ]), toTypeArray(res[1]));
+    });
+
+    test("ground-attack-air-normal-block", () => {
+        var res = Rules.calculateFrames(["Elphelt", "Elphelt"], [["5P"], ["_J", null, null, "_B"]]);
+        assertArraysWeak(expand([
+                [FrameType.ATTACK_STARTUP, 4],
+                [FrameType.ATTACK_ACTIVE, 3],
+                [FrameType.ATTACK_RECOVERY, 5],
+            ]), toTypeArray(res[0]));
+        assertArraysWeak(expand([
+                [FrameType.JUMPSQUAT, 3],
+                [FrameType.NEUTRAL, 2],
+                [FrameType.HITSTUN, 10],
+            ]), toTypeArray(res[1]));
+    });
+
+    test("ground-attack-air-instant-block", () => {
+        var res = Rules.calculateFrames(["Elphelt", "Elphelt"], [["5P"], ["_J", null, null, "_IB"]]);
+        assertArraysWeak(expand([
+                [FrameType.ATTACK_STARTUP, 4],
+                [FrameType.ATTACK_ACTIVE, 3],
+                [FrameType.ATTACK_RECOVERY, 5],
+            ]), toTypeArray(res[0]));
+        assertArraysWeak(expand([
+                [FrameType.JUMPSQUAT, 3],
+                [FrameType.NEUTRAL, 2],
+                [FrameType.HITSTUN, 10],
+            ]), toTypeArray(res[1]));
+    });
+
+    test("ground-attack-air-fautless-defense", () => {
+        var res = Rules.calculateFrames(["Elphelt", "Elphelt"], [["5P"], ["_J", null, null, "_FD"]]);
+        assertArraysWeak(expand([
+                [FrameType.ATTACK_STARTUP, 4],
+                [FrameType.ATTACK_ACTIVE, 3],
+                [FrameType.ATTACK_RECOVERY, 5],
+            ]), toTypeArray(res[0]));
+        assertArraysWeak(expand([
+                [FrameType.JUMPSQUAT, 3],
+                [FrameType.NEUTRAL, 2],
+                [FrameType.BLOCKSTUN, 11],
+            ]), toTypeArray(res[1]));
+    });
+
+
     console.log(numPassed + " / " + numTests + " tests passed.");
 }
 

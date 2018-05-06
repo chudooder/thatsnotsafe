@@ -7,13 +7,13 @@
                     :player="0"
                     :frame="frame-1"></CommandIndicator>
             </div>
-            <div class="frame-row">
+            <div class="frame-row" :style="getStyle(frameData[0][frame-1])">
                 <FrameIndicator :top=true :frameData="frameData[0][frame - 1]"></FrameIndicator>
             </div>
             <div class="frame-row">
                 <span>{{ frame }}</span>
             </div>
-            <div class="frame-row">
+            <div class="frame-row" :style="getStyle(frameData[1][frame-1])">
                 <FrameIndicator :top=false :frameData="frameData[1][frame - 1]"></FrameIndicator>
             </div>
             <div class="frame-row">
@@ -38,7 +38,17 @@
             frame: Number
         },
 
-        computed: mapState(['commands', 'characters', 'frameData'])
+        computed: mapState(['commands', 'characters', 'frameData']),
+
+        methods: {
+            getStyle(frameData) {
+                var style = {};
+                if(frameData.airborne) {
+                    style.backgroundColor = "#99b";
+                }
+                return style;
+            }
+        }
     }
 
 </script>

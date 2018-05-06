@@ -2054,15 +2054,22 @@ var Characters = (() => {
         [19, 20, 18, 18, 14, 20, 19, 11, 23]
     ];
 
-    function hitstun(level, crouching) {
-        var column = crouching ? 1 : 0;
+    function hitstun(level, crouching, airborne) {
+        var column = 0;
+        if(airborne) column = 2;
+        if(crouching) column = 1;
         return _stunTable[level][column];
     };
 
-    function blockstun(level, instant, faultless) {
+    function blockstun(level, instant, faultless, airborne) {
         var column = 3;
-        if(instant) column = 4;
-        if(faultless) column = 5;
+        if(airborne) {
+            if(instant) column = 7;
+            if(faultless) column = 8;
+        } else {
+            if(instant) column = 4;
+            if(faultless) column = 5;
+        }
         return _stunTable[level][column];
     };
 
