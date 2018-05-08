@@ -212,6 +212,11 @@ body {
 
 /* Tooltip stuff */
 
+.frame-indicator-background {
+    width: var(--square-size);
+    height: var(--square-size);
+}
+
 .frame-indicator:hover .frame-tooltip {
     visibility: visible;
 }

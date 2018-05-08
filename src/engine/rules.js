@@ -28,7 +28,8 @@ var FrameType = {
 
 var Stance = {
     STANDING: 0,
-    CROUCHING: 1
+    CROUCHING: 1,
+    AIRBORNE: 2
 }
 
 function arrSum(arr) {
@@ -132,7 +133,7 @@ function isCrouching(state) {
 }
 
 function isAirborne(state) {
-    return state.airborne;
+    return state.stance === Stance.AIRBORNE;
 }
 
 function blocksMove(state, move) {
@@ -225,13 +226,10 @@ function processFrameType(frame, states, frames) {
     for(var player = 0; player <= 1; player++) {
         var other = 1 - player;
         var frameType = {
-            type: FrameType.NEUTRAL,
-            airborne: false
+            type: FrameType.NEUTRAL
         };
 
-        if(states[player].airborne) {
-            frameType.airborne = true;
-        }
+        frameType.stance = states[player].stance;
 
         // for attacking frames
         if(states[player].type == PlayerState.ATTACKING) {
@@ -355,7 +353,7 @@ function processStateInteraction(frame, states, frames, characters) {
             newStates[player].jumpsquat -= 1;
             if(newStates[player].jumpsquat == 0) {
                 newStates[player].type = PlayerState.NEUTRAL;
-                newStates[player].airborne = true;
+                newStates[player].stance = Stance.AIRBORNE;
             }
         }
 
@@ -383,14 +381,14 @@ function processFinalStateChangingCommands(frame, commands, states, characters) 
             continue;
 
         // land
-        } else if(command == "_L" && states[player].airborne) {
+        } else if(command == "_L" && isAirborne(states[player])) {
             if(states[player].type == PlayerState.ATTACKING && states[player].move.recovery_after_landing) {
                 states[player].type = PlayerState.LANDING_RECOVERY;
                 states[player].landingRecovery = states[player].move.recovery_after_landing;
             } else {
                 states[player].type = PlayerState.NEUTRAL;
             }
-            states[player].airborne = false;
+            states[player].stance = Stance.STANDING;
         }
     }
 }
@@ -445,7 +443,9 @@ function calculateFrames(characters, commands) {
 
 var Rules = {
     calculateFrames: calculateFrames,
-    FrameType: FrameType
+    FrameType: FrameType,
+    Stance: Stance,
+    Playerstate: PlayerState
 };
 
 export default Rules

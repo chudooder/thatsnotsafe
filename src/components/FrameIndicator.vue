@@ -1,6 +1,8 @@
 <template>
-    <div class="frame-indicator" :style="getStyle()">
-        <span class="frame-tooltip unselectable" :style=getTooltipStyle(top) >{{ toString(frameData) }}</span>
+    <div class="frame-indicator-background" :style="getBackgroundStyle()">
+        <div class="frame-indicator" :style="getMainStyle()">
+            <span class="frame-tooltip unselectable" :style=getTooltipStyle(top) >{{ stateName }}</span>
+        </div>
     </div>
 </template>
 
@@ -15,18 +17,8 @@
         },
 
         computed: {
-            color: function() {
-                return this.toColor(this.frameData.type);
-            },
-
-            stripeBackground: function() {
-                return require('./img/black-twill.png');
-            }
-        },
-
-        methods: {
-            toColor: function(frameType) {
-                switch(frameType) {
+            mainColor: function() {
+                switch(this.frameData.type) {
                     case Rules.FrameType.NEUTRAL:
                         return "#ffffff";
                     case Rules.FrameType.BLOCKING:
@@ -50,8 +42,19 @@
                 }
             },
 
-            toString: function(frameData) {
-                switch(frameData.type) {
+            backgroundColor: function() {
+                switch(this.frameData.stance) {
+                    case Rules.Stance.STANDING:
+                        return "#ffffff";
+                    case Rules.Stance.CROUCHING:
+                        return "#88ff88";
+                    case Rules.Stance.AIRBORNE:
+                        return "#8888ff";
+                }
+            },
+
+            stateName: function() {
+                switch(this.frameData.type) {
                     case Rules.FrameType.NEUTRAL:
                         return "Neutral";
                     case Rules.FrameType.BLOCKING:
@@ -65,9 +68,9 @@
                     case Rules.FrameType.ATTACK_RECOVERY:
                         return "Recovery";
                     case Rules.FrameType.HITSTUN:
-                        return "Hitstun (" + frameData.stun + "F)";
+                        return "Hitstun (" + this.frameData.stun + "F)";
                     case Rules.FrameType.BLOCKSTUN:
-                        return "Blockstun (" + frameData.stun + "F)";
+                        return "Blockstun (" + this.frameData.stun + "F)";
                     case Rules.FrameType.JUMPSQUAT:
                         return "Jump Startup"
                     case Rules.FrameType.LANDING_RECOVERY:
@@ -75,15 +78,28 @@
                 }
             },
 
-            getStyle: function() {
-                var style = {};
-                style.backgroundColor = this.color;
+            stripeBackground: function() {
+                return require('./img/black-twill.png');
+            }
+        },
+
+        methods: {
+            getMainStyle: function() {
+                var style = {
+                    backgroundColor: this.mainColor
+                };
 
                 if(this.frameData.startOfHitbox) {
                     style.backgroundImage = 'url(' + this.stripeBackground + ')';
                 }
 
                 return style;
+            },
+
+            getBackgroundStyle: function() {
+                return {
+                    backgroundColor: this.backgroundColor
+                };
             },
 
             getTooltipStyle: function(top) {
